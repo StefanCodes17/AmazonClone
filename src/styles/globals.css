@@ -1,0 +1,12 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer components{
+    .main_link{
+        @apply cursor-pointer hover:underline;
+    }
+    .sub_link{
+        @apply py-0.5 px-2 rounded-sm cursor-pointer hover:border-2 hover:-mx-0.5
+    }
+}
