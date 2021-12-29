@@ -3,10 +3,25 @@ import {MenuIcon, ShoppingCartIcon, SearchIcon } from '@heroicons/react/outline'
 
 const subLinks = [
     {
-        text: "Prime Video"
+        text: "Prime Video",
     },
     {
-        text: "Today's Deals"
+        text: "Today's Deals",
+    },
+    {
+        text: "Amazon Basics",
+    },
+    {
+        text: "Best Sellers"
+    },
+    {
+        text: "Luxury Stores"
+    },
+    {
+        text: "Customer Service"
+    },
+    {
+        text: "Coupons"
     }
 ]
 
@@ -55,10 +70,14 @@ const Header = () => {
                 <div className='flex items-center sub_link'>
                     <MenuIcon className='h-6 mr-1'/>
                     <p>All</p>
-                </div>
-                <div className='sub_link'>
-                    <p>Prime Video</p>
-                </div>
+                </div> 
+                {
+                    subLinks.map(({text}, i) => (
+                        <div className={` ${i > 2 && "hidden"} lg:inline-flex sub_link`} key={text.substring(0, 4) + i}>
+                            <p>{text}</p>
+                        </div>
+                    ))
+                }
             </div>
         </header>
     )
