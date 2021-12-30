@@ -24,6 +24,10 @@ export default function Home({products}) {
 }
 
 export async function getServerSideProps(context){
+  context.res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=10, stale-while-revalidate=59'
+  )
   const products = await fetch("https://fakestoreapi.com/products")
   .then(res => res.json())
   return {
