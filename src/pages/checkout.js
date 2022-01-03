@@ -5,12 +5,34 @@ import Header from "../components/Header"
 import CheckoutProduct from '../components/CheckoutProduct'
 import { selectItems, selectSubTotal } from '../slices/basketSlice'
 import { useSession } from 'next-auth/react'
+import { loadStripe } from '@stripe/stripe-js'
+import axios from "axios"
+
+const stripePromise = loadStripe(
+    process.env.stripe_public_key
+)
 
 const Checkout = () => {
     const { data: session, status } = useSession()
 
     const items = useSelector(selectItems)
     const subTotal = useSelector(selectSubTotal)
+
+    const createCheckoutSession = async ()=>{
+        const stripe = await stripePromise;
+        const checkoutSession = await axios.post(
+            '/api/create-checkout-session',
+            {
+                items,
+                email: session.user.email
+            })
+
+        const res = await stripe.redirectToCheckout({
+            sessionId: checkoutSession.data.id
+        })
+
+        if(res.error) alert(res.error.message)
+    }
 
     return (
         <div className="bg-gray-100">
@@ -44,8 +66,11 @@ const Checkout = () => {
                         </h2>
 
                         <button 
+                        role="link"
                         disabled={!session}
-                        className={`button mt-2 ${!session && 'from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed'}`}>
+                        className={`button mt-2 ${!session && 'from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed'}`}
+                        onClick={createCheckoutSession}
+                        >
                             {!session ? "Sign in to checkout" : "Proceed to checkout"} 
                         </button>
                     </>
