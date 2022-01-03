@@ -9,7 +9,7 @@ const options = {
         clientSecret: process.env.GOOGLE_SECRET,
       }),
   ],
-  secret: NX_SECRET
+  secret: process.env.NX_SECRET
 }
 
 export default (req, res) => NextAuth(req, res, options)
