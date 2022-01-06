@@ -20,7 +20,7 @@ const Order = ({id, amount, amountShipping, items, timestamp, images}) => {
             <div className="p-5">
                 <div className="flex space-x-6 overflow-x-auto">
                     {images.map( img =>(
-                        <img src={img} alt={img.substring(0, 5)} className="h-20 object-contain sm:h-32" />
+                        <img key={img.substring(0, 5)} src={img} alt={img} className="h-20 object-contain sm:h-32" />
                     ))}
                 </div>
             </div>
