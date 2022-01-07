@@ -5,8 +5,8 @@ const options = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
-        clientId: process.env.GOOGLE_ID,
-        clientSecret: process.env.GOOGLE_SECRET,
+        clientId: process.env.CLIENT_GOOGLE_ID,
+        clientSecret: process.env.CLIENT_GOOGLE_SECRET,
       }),
   ],
   secret: process.env.NX_SECRET

@@ -12,14 +12,14 @@ import {
   collectionGroup,
   orderBy } from "firebase/firestore"; 
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCn2zAk4c16t9EYl1SDA9GwXxGVuKYjOj0",
-    authDomain: "clone-2da43.firebaseapp.com",
-    projectId: "clone-2da43",
-    storageBucket: "clone-2da43.appspot.com",
-    messagingSenderId: "639589129608",
-    appId: "1:639589129608:web:469fc52cd670ced650ae3d",
-    measurementId: "G-3HZYBR9MDE"
+  const firebaseConfig = {
+    apiKey: "AIzaSyBMn6NixVVBKyNsMHAwNT1ktat8FmcY3lQ",
+    authDomain: "i-crossbar-337501.firebaseapp.com",
+    projectId: "i-crossbar-337501",
+    storageBucket: "i-crossbar-337501.appspot.com",
+    messagingSenderId: "184243922970",
+    appId: "1:184243922970:web:50de6150319088c11189a3",
+    measurementId: "G-VBWDZ9MH5W"
   };
 
 const app = initializeApp(firebaseConfig)
