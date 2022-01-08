@@ -34,7 +34,7 @@ const Header = () => {
     const { data: session, status } = useSession()
     const router = useRouter()
     const items = useSelector(selectItems)
-
+    console.log(session && session.user)
     return (
         <header>
             {/*Top Nav*/}
