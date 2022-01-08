@@ -38,19 +38,22 @@ export async function getServerSideProps(context){
     const session = await getSession(context)
 
     if(!session) return {props:{}}
-
-    const ordersRef = await getDocs(collection(db, `users/${session.user.email}/orders`), orderBy("timestamp", 'desc'))
-    const orders = await Promise.all(
-        ordersRef.docs.map(async (order) =>({
-            id: order.id,
-            amount: order.data().amount,
-            amountShipping: order.data().amount_shipping,
-            images: order.data().images,
-            timestamp: moment(order.data().timestamp.toDate()).unix(),
-            items: (await stripe.checkout.sessions.listLineItems(order.id,
-                    { limit: 100 })).data
-        }))
-    )
+    try{
+        const ordersRef = await getDocs(collection(db, `users/${session.user.email}/orders`), orderBy("timestamp", 'desc'))
+        const orders = await Promise.all(
+            ordersRef.docs.map(async (order) =>({
+                id: order.id,
+                amount: order.data().amount,
+                amountShipping: order.data().amount_shipping,
+                images: order.data().images,
+                timestamp: moment(order.data().timestamp.toDate()).unix(),
+                items: (await stripe.checkout.sessions.listLineItems(order.id,
+                        { limit: 100 })).data
+            }))
+        )
+    }catch(e){
+        console.log(`Error with order fetching: ${e.message}`)
+    }
     return {
         props:{
             orders
