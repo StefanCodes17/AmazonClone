@@ -76,18 +76,20 @@ const Header = () => {
             </div>
 
             {/*Bottom Nav*/}
-            <div className='flex items-center flex-grow flex-shrink bg-amazon_blue-light text-white px-4 h-10 text-md overflow-x-auto'>
+            <div className='flex items-center flex-grow flex-shrink bg-amazon_blue-light text-white px-4 h-10 text-md'>
                 <div className='flex items-center sub_link'>
                     <MenuIcon className='h-6 mr-1'/>
                     <p>All</p>
                 </div> 
+                <div className='flex items-center overflow-x-auto'>
                 {
                     subLinks.map(({text}, i) => (
-                        <div className={` ${i > 2 && "hidden"} lg:inline-flex sub_link`} key={text.substring(0, 4) + i}>
+                        <div className={` ${i > 2 && "hidden"} lg:inline-flex sub_link whitespace-nowrap`} key={text.substring(0, 4) + i}>
                             <p>{text}</p>
                         </div>
                     ))
                 }
+                </div>
             </div>
         </header>
     )
