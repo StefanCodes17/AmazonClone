@@ -81,7 +81,7 @@ const Header = () => {
                     <MenuIcon className='h-6 mr-1'/>
                     <p>All</p>
                 </div> 
-                <div className='flex items-center overflow-x-auto'>
+                <div className='flex items-center overflow-x-auto md:overflow-hidden px-1'>
                 {
                     subLinks.map(({text}, i) => (
                         <div className={` ${i > 2 && "hidden"} lg:inline-flex sub_link whitespace-nowrap`} key={text.substring(0, 4) + i}>
