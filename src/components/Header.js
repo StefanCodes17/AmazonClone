@@ -57,7 +57,7 @@ const Header = () => {
                 <div className='text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap'>
                     <div className="main_link" onClick={!session ? signIn : signOut}>
                         <p>
-                            {session ? `Hello ${session.user.name}` : `Sign In`}</p>
+                            {session ? `Hello, ${session.user.name}` : `Sign In`}</p>
                         <p className="font-extrabold md:text-sm">Account & Lists</p>
                     </div>
                     <div className="main_link" onClick={()=>router.push('/orders')}>
