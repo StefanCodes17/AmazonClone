@@ -76,7 +76,7 @@ const Header = () => {
             </div>
 
             {/*Bottom Nav*/}
-            <div className='flex items-center flex-grow flex-shrink bg-amazon_blue-light text-white px-4 h-10 text-md'>
+            <div className='flex items-center flex-grow flex-shrink bg-amazon_blue-light text-white px-4 h-10 text-md overflow-x-auto'>
                 <div className='flex items-center sub_link'>
                     <MenuIcon className='h-6 mr-1'/>
                     <p>All</p>
