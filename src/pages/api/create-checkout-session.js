@@ -2,6 +2,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async (req, res)=>{
     if(req.method === "POST"){
+        console.log("Attempting stuff")
+        /*
         const {items, email} = req.body
         const transformedItems = items.map(it => ({
             description: it.description,
@@ -33,6 +35,7 @@ export default async (req, res)=>{
             }
         })
 
-        res.status(200).json({id: session.id})
+        res.status(200).json({id: session.id})4
+        */
     }
 }
