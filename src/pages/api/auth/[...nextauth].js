@@ -9,7 +9,15 @@ const options = {
         clientSecret: process.env.CLIENT_GOOGLE_SECRET,
       }),
   ],
-  secret: process.env.NX_SECRET
+  secret: process.env.NX_SECRET,
+  callbacks: {
+    async signIn({ account, profile }) {
+      if (account.provider === "google") {
+        return profile.email_verified
+      }
+      return true
+    },
+  }
 }
 
 export default (req, res) => NextAuth(req, res, options)

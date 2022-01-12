@@ -1,25 +1,38 @@
 import {buffer} from 'micro'
-import * as admin from 'firebase-admin'
-
-
-const serviceAccount = require("../../../permissions.json");
-
-const app = !admin.apps.length ? admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-}) : admin.app()
+import { connectToDatabase } from '../../util/mongodb'
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 const endpointSecret = process.env.STRIPE_CLI_SECRET
 
 const fulfillOrder = async (session)=>{
-    return app.firestore().collection('users').doc(session.metadata.email).collection("orders").doc(session.id).set({
-        amount: session.amount_total / 100,
-        amount_shipping: session.total_details.amount_shipping / 100,
-        images: JSON.parse(session.metadata.images),
-        timestamp: admin.firestore.FieldValue.serverTimestamp()
-    }).then(()=>{
-        console.log(`SUCCESS: Order ${session.id} has been added to the DB!`)
-    })
+    const { db } = await connectToDatabase();
+    if(!db) throw Error("Failure to connect to database")
+    const existingUser = await db.collection("users").findOne({email: session.metadata.email})
+    if(existingUser){
+        return db.collection("users").updateOne(
+            { email: session.metadata.email },
+            { $push: { "orders" :  {
+                id: session.id,
+                amount: session.amount_total / 100,
+                amount_shipping: session.total_details.amount_shipping / 100,
+                images: JSON.parse(session.metadata.images)
+            } } }
+         ).then(()=>
+            console.log(`SUCCESS: Order ${session.id} has been added to the DB!`)
+         )
+    }else{
+        return db.collection("users").insert({
+            email: session.metadata.email,
+            orders: [{
+                id: session.id,
+                amount: session.amount_total / 100,
+                amount_shipping: session.total_details.amount_shipping / 100,
+                images: JSON.parse(session.metadata.images)
+            }]
+        }).then(()=>{
+            console.log(`SUCCESS: Order ${session.id} has been added to the DB!`)
+        })
+    }
 }
 
 export default async (req, res)=>{

@@ -1,7 +1,7 @@
 import { getSession, useSession } from 'next-auth/react'
+import { connectToDatabase } from '../util/mongodb'
 import Header from '../components/Header'
 import Order from '../components/Order'
-import { collection, getDocs, doc, QuerySnapshot, getFirestore, getDoc, collectionGroup, orderBy } from "../../firebase"; 
 
 const Orders = ({orders}) => {
     const { data: session, status } = useSession()
@@ -34,24 +34,23 @@ export default Orders
 export async function getServerSideProps(context){
     const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
     const moment = require("moment")
-    const db = getFirestore()
+    const { db } = await connectToDatabase();
+    if(!db) throw Error("Failure to connect to database")
     const session = await getSession(context)
 
     if(!session) return {props:{}}
     let orders;
     try{
-        const ordersRef = await getDocs(collection(db, `users/${session.user.email}/orders`), orderBy("timestamp", 'desc'))
-        orders = await Promise.all(
-            ordersRef.docs.map(async (order) =>({
+        const ordersRef = await db.collection("users").findOne({"email": session.user.email})
+        orders = await Promise.all(ordersRef.orders.map(async (order) =>({
                 id: order.id,
-                amount: order.data().amount,
-                amountShipping: order.data().amount_shipping,
-                images: order.data().images,
-                timestamp: moment(order.data().timestamp.toDate()).unix(),
+                amount: order.amount,
+                amountShipping: order.amount_shipping,
+                images: order.images,
+                //timestamp: order.timestamp,
                 items: (await stripe.checkout.sessions.listLineItems(order.id,
                         { limit: 100 })).data
-            }))
-        )
+        })))
     }catch(e){
         console.log(`Error with order fetching: ${e.message}`)
     }
