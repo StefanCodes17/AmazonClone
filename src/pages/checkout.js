@@ -19,19 +19,20 @@ const Checkout = () => {
     const subTotal = useSelector(selectSubTotal)
 
     const createCheckoutSession = async ()=>{
-        const stripe = await stripePromise;
-        const checkoutSession = await axios.post(
-            '/api/create-checkout-session',
-            {
-                items,
-                email: session.user.email
+        try{
+            const stripe = await stripePromise;
+            const checkoutSession = await axios.post(
+                '/api/create-checkout-session',
+                {
+                    items,
+                    email: session.user.email
+                })
+            await stripe.redirectToCheckout({
+                sessionId: checkoutSession.data.id
             })
-
-        const res = await stripe.redirectToCheckout({
-            sessionId: checkoutSession.data.id
-        })
-
-        if(res.error) alert(res.error.message)
+        }catch(e){
+            console.log(`Creating checkout sesssion err: ${e.message}`)
+        }
     }
 
     return (
