@@ -14,7 +14,7 @@
     "@tailwindcss/line-clamp": "^0.3.0",
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
-    "firebase": "^9.6.1",
+    "firebase": "^9.6.2",
     "firebase-admin": "^10.0.1",
     "micro": "^9.3.4",
     "moment": "^2.29.1",

@@ -38,9 +38,10 @@ export async function getServerSideProps(context){
     const session = await getSession(context)
 
     if(!session) return {props:{}}
+    let orders;
     try{
         const ordersRef = await getDocs(collection(db, `users/${session.user.email}/orders`), orderBy("timestamp", 'desc'))
-        const orders = await Promise.all(
+        orders = await Promise.all(
             ordersRef.docs.map(async (order) =>({
                 id: order.id,
                 amount: order.data().amount,
