@@ -1,4 +1,5 @@
 import {buffer} from 'micro'
+import { Timestamp } from 'mongodb'
 import { connectToDatabase } from '../../util/mongodb'
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
@@ -8,7 +9,6 @@ const fulfillOrder = async (session)=>{
     const { db } = await connectToDatabase();
     if(!db) throw Error("Failure to connect to database")
     const existingUser = await db.collection("users").findOne({email: session.metadata.email})
-    console.log(existingUser)
     if(existingUser){
         return db.collection("users").updateOne(
             { email: session.metadata.email },
@@ -16,7 +16,8 @@ const fulfillOrder = async (session)=>{
                 id: session.id,
                 amount: session.amount_total / 100,
                 amount_shipping: session.total_details.amount_shipping / 100,
-                images: JSON.parse(session.metadata.images)
+                images: JSON.parse(session.metadata.images),
+                timestamp: new Date().toISOString()
             } } }
          ).then(()=>
             console.log(`SUCCESS: Order ${session.id} has been added to the DB!`)
@@ -28,7 +29,8 @@ const fulfillOrder = async (session)=>{
                 id: session.id,
                 amount: session.amount_total / 100,
                 amount_shipping: session.total_details.amount_shipping / 100,
-                images: JSON.parse(session.metadata.images)
+                images: JSON.parse(session.metadata.images),
+                timestamp: new Date().toISOString()
             }]
         }).then(()=>{
             console.log(`SUCCESS: Order ${session.id} has been added to the DB!`)
