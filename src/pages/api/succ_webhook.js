@@ -8,6 +8,7 @@ const fulfillOrder = async (session)=>{
     const { db } = await connectToDatabase();
     if(!db) throw Error("Failure to connect to database")
     const existingUser = await db.collection("users").findOne({email: session.metadata.email})
+    console.log(existingUser)
     if(existingUser){
         return db.collection("users").updateOne(
             { email: session.metadata.email },
@@ -20,8 +21,8 @@ const fulfillOrder = async (session)=>{
          ).then(()=>
             console.log(`SUCCESS: Order ${session.id} has been added to the DB!`)
          )
-    }else{
-        return db.collection("users").insert({
+    }
+        return db.collection("users").insertOne({
             email: session.metadata.email,
             orders: [{
                 id: session.id,
@@ -32,7 +33,7 @@ const fulfillOrder = async (session)=>{
         }).then(()=>{
             console.log(`SUCCESS: Order ${session.id} has been added to the DB!`)
         })
-    }
+    
 }
 
 export default async (req, res)=>{
