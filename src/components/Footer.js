@@ -55,26 +55,28 @@ const Footer = () => {
         <div className="bg-amazon_blue-light px-4 py-8 text-white">
             <div className="text-center sm:flex justify-evenly max-w-5xl m-auto">
             {links.slice(0,1).map(col =>(
-                    <div>
+                    <div key={col.section}>
                         <h2 className="font-bold">{col.section}</h2>
                         <div className="flex flex-col space-y-2 mt-2">
                             {col.subLinks.map(l =>(
                                 <a 
                                 className="text-sm hover:underline whitespace-nowrap"
                                 href={l.link}
+                                key={l.text}
                                 >{l.text}</a>
                             ))}
                         </div>
                     </div>
                 ))}
                 {links.slice(1).map(col =>(
-                    <div className="hidden sm:block">
+                    <div className="hidden sm:block" key={col.section}>
                         <h2 className="font-bold">{col.section}</h2>
                         <div className="flex flex-col space-y-2 mt-2">
                             {col.subLinks.map(l =>(
                                 <a 
                                 className="text-sm hover:underline whitespace-nowrap"
                                 href={l.link}
+                                key={l.text}
                                 >{l.text}</a>
                             ))}
                         </div>
