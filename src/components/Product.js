@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import {addToBasket} from '../slices/basketSlice'
 import { useState, useCallback } from 'react'
 
-const Product = ({id, title, price, description, category, image}) => {
+const Product = ({id, title, price, description, category, image, setShow}) => {
     const [rating] = useState(Math.floor(Math.random() * 5 + 1))
     const [hasPrime] = useState(Math.random() < 0.5)
     const dispatch = useDispatch()
@@ -13,6 +13,7 @@ const Product = ({id, title, price, description, category, image}) => {
             id, title, price, description, category, image, rating, hasPrime
         }
         dispatch(addToBasket(product))
+        setShow(true)
     }, [id, title, price, description, category, image])
 
     return (

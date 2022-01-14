@@ -9,6 +9,9 @@ module.exports = {
           light: "#232F3E",
           DEFAULT: "#131921"
         }
+      },
+      animation:{
+        bounce: "bounce 1s ease-in-out"
       }
     },
   },
@@ -17,3 +20,4 @@ module.exports = {
   },
   plugins: [require('@tailwindcss/line-clamp')],
 }
+

@@ -14,9 +14,8 @@ export const basketSlice = createSlice({
             if(idx >= 0){
                 newCart[idx].quantity += 1 
                 state.items = newCart
-            }else{
-                state.items = [...state.items, {...action.payload, quantity: 1}]
-            }
+            }else if(state.items.length < 10){
+                state.items = [...state.items, {...action.payload, quantity: 1}]            }
         },
         removeFromBasket: (state, action) =>{
             const idx = state.items.findIndex(items => items.id === action.payload.id)
@@ -42,6 +41,13 @@ export const basketSlice = createSlice({
 export const {addToBasket, removeFromBasket, updateQuantity} = basketSlice.actions
 
 export const selectItems = (state) => state.basket.items
+export const selectStatus = (state) => {
+    if(state.basket.items.length >= 10){
+        return "warning"
+    }else{
+        return "confirm"
+    }
+}
 export const selectSubTotal = (state) => state.basket.items.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)
 
 export default basketSlice.reducer
