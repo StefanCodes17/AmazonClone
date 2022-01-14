@@ -41,8 +41,14 @@ export async function getServerSideProps(context){
     if(!session) return {props:{}}
     let orders;
     try{
-        const ordersRef = await db.collection("users").findOne({"email": session.user.email})
-        orders = await Promise.all(ordersRef.orders.map(async (order) =>({
+        let ordersRef = await db.collection("users").findOne({"email": session.user.email})
+        orders = await Promise.all(ordersRef.orders.sort((a, b) => {
+            if(a.timestamp < b.timestamp){
+                return 0
+            }else{
+                return -1
+            }
+        }).map(async (order) =>({
                 id: order.id,
                 amount: order.amount,
                 amountShipping: order.amount_shipping,

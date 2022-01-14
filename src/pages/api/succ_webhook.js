@@ -1,5 +1,4 @@
 import {buffer} from 'micro'
-import { Timestamp } from 'mongodb'
 import { connectToDatabase } from '../../util/mongodb'
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
