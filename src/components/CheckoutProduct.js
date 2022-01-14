@@ -2,13 +2,17 @@ import { StarIcon } from "@heroicons/react/solid"
 import Image from "next/image"
 import { useCallback } from "react"
 import { useDispatch } from "react-redux"
-import { removeFromBasket } from "../slices/basketSlice" 
+import { removeFromBasket, updateQuantity } from "../slices/basketSlice" 
 
-const CheckoutProduct = ({id, title, price, description, category, image, rating, hasPrime}) => {
+const CheckoutProduct = ({id, title, price, description, category, quantity, image, rating, hasPrime}) => {
 
     const dispatch = useDispatch()
     const removeItemFromCart = useCallback(()=>{
         dispatch(removeFromBasket({id}))
+    })
+
+    const changeQuantity = useCallback((q) =>{
+        dispatch(updateQuantity({id, quantity: q}))
     })
 
     return (
@@ -22,6 +26,14 @@ const CheckoutProduct = ({id, title, price, description, category, image, rating
                 ))}
                 </div>
                 <p className="text-xs my-2 line-clamp-3">{description}</p>
+                <form className="my-2" >
+                    <label className="mr-2 text-md" for="quantity">Quantity: </label>
+                    <select name="quantity" id="quantity" value={quantity} onChange={(e)=>changeQuantity(parseInt(e.target.value))}>
+                        {[...new Array(10).keys()].map(i =>(
+                            <option value={`${i + 1}`}>{i+1}</option>
+                        ))}
+                    </select>
+                </form>
                 <p className="text-md">${price}</p>
  
                 {hasPrime && 

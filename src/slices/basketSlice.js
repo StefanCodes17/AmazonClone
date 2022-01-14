@@ -9,7 +9,14 @@ export const basketSlice = createSlice({
     initialState,
     reducers:{
         addToBasket: (state, action) => {
-            state.items = [...state.items, action.payload]
+            const idx = state.items.findIndex(items => items.id === action.payload.id)
+            let newCart = [...state.items]
+            if(idx >= 0){
+                newCart[idx].quantity += 1 
+                state.items = newCart
+            }else{
+                state.items = [...state.items, {...action.payload, quantity: 1}]
+            }
         },
         removeFromBasket: (state, action) =>{
             const idx = state.items.findIndex(items => items.id === action.payload.id)
@@ -20,11 +27,19 @@ export const basketSlice = createSlice({
                 console.warn(`Can't remove product at id: ${action.payload.id}`)
             }
             state.items = newCart;
+        },
+        updateQuantity: (state, action) => {
+            const idx = state.items.findIndex(items => items.id === action.payload.id)
+            let newCart = [...state.items]
+            if(idx >= 0){
+                newCart[idx].quantity = action.payload.quantity
+            }
+            state.items = newCart;
         }
     }
 })
 
-export const {addToBasket, removeFromBasket} = basketSlice.actions
+export const {addToBasket, removeFromBasket, updateQuantity} = basketSlice.actions
 
 export const selectItems = (state) => state.basket.items
 export const selectSubTotal = (state) => state.basket.items.reduce((acc, item) => acc + item.price, 0).toFixed(2)

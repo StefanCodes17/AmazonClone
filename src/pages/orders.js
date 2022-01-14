@@ -57,6 +57,7 @@ export async function getServerSideProps(context){
                 items: (await stripe.checkout.sessions.listLineItems(order.id,
                         { limit: 100 })).data
         })))
+        console.log(orders[0].items)
     }catch(e){
         console.log(`Error with order fetching: ${e.message}`)
     }
