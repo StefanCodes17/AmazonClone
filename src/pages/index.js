@@ -1,6 +1,7 @@
 import Head from 'next/head'
 
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 import Banner from '../components/Banner'
 import ProductFeed from '../components/ProductFeed'
 import { getSession } from 'next-auth/react'
@@ -19,7 +20,7 @@ export default function Home({products}) {
       <ProductFeed products={products}/>
 
     </main>
-
+    <Footer/>
     </div>
   )
 }
