@@ -33,7 +33,6 @@ export default Orders
 
 export async function getServerSideProps(context){
     const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
-    const moment = require("moment")
     const { db } = await connectToDatabase();
     if(!db) throw Error("Failure to connect to database")
     const session = await getSession(context)
@@ -57,7 +56,6 @@ export async function getServerSideProps(context){
                 items: (await stripe.checkout.sessions.listLineItems(order.id,
                         { limit: 100 })).data
         })))
-        console.log(orders[0].items)
     }catch(e){
         console.log(`Error with order fetching: ${e.message}`)
     }

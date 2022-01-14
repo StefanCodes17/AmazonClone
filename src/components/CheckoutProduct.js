@@ -27,10 +27,10 @@ const CheckoutProduct = ({id, title, price, description, category, quantity, ima
                 </div>
                 <p className="text-xs my-2 line-clamp-3">{description}</p>
                 <form className="my-2" >
-                    <label className="mr-2 text-md" for="quantity">Quantity: </label>
+                    <label className="mr-2 text-md" htmlFor="quantity">Quantity: </label>
                     <select name="quantity" id="quantity" value={quantity} onChange={(e)=>changeQuantity(parseInt(e.target.value))}>
                         {[...new Array(10).keys()].map(i =>(
-                            <option value={`${i + 1}`}>{i+1}</option>
+                            <option value={`${i + 1}`} key={i}>{i+1}</option>
                         ))}
                     </select>
                 </form>
