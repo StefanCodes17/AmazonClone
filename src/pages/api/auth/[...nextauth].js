@@ -24,7 +24,7 @@ const options = {
           const testUser = {
             name: "Joe User",
             email: "joeUser@user.com",
-            password: "><securePassword><"
+            password: "><123SecurePassword*><"
           }
     
           if (email === testUser.email && password === testUser.password) {
