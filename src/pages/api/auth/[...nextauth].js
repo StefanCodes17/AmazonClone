@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
+import {AddUser} from '../../../util/User'
 
 const options = {
   session: { 
@@ -45,8 +46,14 @@ const options = {
   secret: process.env.NX_SECRET,
   callbacks: {
     async signIn({ account, profile }) {
-      if (account.provider === "google") {
-        return profile.email_verified
+      if (account.provider === "google" && profile.email_verified) {
+        const {name, email, picture, email_verified} = profile
+        const user = AddUser({name, email, picture, email_verified})
+        if(user){
+          return true
+        }else{
+          return null
+        }
       }
       return true
     }

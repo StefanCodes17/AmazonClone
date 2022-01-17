@@ -1,4 +1,5 @@
 import { connectToDatabase } from '../../lib/mongodb'
+import bcrypt from 'bcrypt'
 
 /*
 {
@@ -34,10 +35,9 @@ const validatePassword = (pass) =>{
 }
 
 function validateUser(email, password, confirmPassword){
-    let res = {
-        loading: false,
-    }
+    let res = {}
     if(!validateEmail(email)){
+        res.error = true
         res.email = {
             error:{
                 message: "Not a valid email"
@@ -47,6 +47,7 @@ function validateUser(email, password, confirmPassword){
     }
    
     if(password.length < 6){
+        res.error = true
         res.password = {
             error: {
                 message: "Password must be longer than 6 characters"
@@ -56,6 +57,7 @@ function validateUser(email, password, confirmPassword){
     }
     
     if(!validatePassword(password)){
+        res.error = true
         res.password = {
             error:{
                 message: "Password is not strong enough"
@@ -64,6 +66,7 @@ function validateUser(email, password, confirmPassword){
         return res
     }
     if(password !== confirmPassword){
+        res.error = true
         res.password = {
             error:{
                 message: "Passwords must match!"
@@ -77,10 +80,13 @@ function validateUser(email, password, confirmPassword){
         return res
     }
         return {
+            error: false,
             status: 200,
             loading: false,
-            success:{
-                messsage: `Welcome!, ${email}`
+            account:{
+                success:{
+                    message: `Successfully made an account, ${email}!`
+                }
             }
         }
 
@@ -89,6 +95,35 @@ function validateUser(email, password, confirmPassword){
 export default async (req, res)=>{
     if(req.method === "POST"){
         const {email, password, confirmPassword} = req.body
-        res.json(validateUser(email, password, confirmPassword))
+        const {error, ...data} = validateUser(email, password, confirmPassword)
+        if(!error){
+            const { db } = await connectToDatabase();
+            if(!db) throw Error("Failure to connect to database")
+            const existingUser = await db.collection("users").findOne({email: email})
+            if(existingUser){
+               return res.json({
+                    account:{
+                        error: {
+                            message: "An account is already assocaited with this email"
+                        }
+                    }
+                })
+            }
+            if(!existingUser){
+                bcrypt.hash(password, 15, function(err, hash) {
+                    db.collection("users").insertOne({
+                        email,
+                        name: email.split("@")[0],
+                        email_verified: false,
+                        picture: "/",
+                        password: hash,
+                        orders: []
+                        }).then(()=>{
+                            res.json(data)
+                        })
+                });
+            }
+        }
+        return res.json(data)
     }
 }

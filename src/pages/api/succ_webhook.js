@@ -22,19 +22,6 @@ const fulfillOrder = async (session)=>{
             console.log(`SUCCESS: Order ${session.id} has been added to the DB!`)
          )
     }
-        return db.collection("users").insertOne({
-            email: session.metadata.email,
-            orders: [{
-                id: session.id,
-                amount: session.amount_total / 100,
-                amount_shipping: session.total_details.amount_shipping / 100,
-                images: JSON.parse(session.metadata.images),
-                timestamp: new Date().toISOString()
-            }]
-        }).then(()=>{
-            console.log(`SUCCESS: Order ${session.id} has been added to the DB!`)
-        })
-    
 }
 
 export default async (req, res)=>{
