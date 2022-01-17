@@ -78,7 +78,7 @@ export default function SignIn({ providers, csrfToken}) {
               <p 
               className="text-sm text-gray-800 hover:underline underline-offset-2 cursor-pointer"
               onClick={() => router.push("/auth/signup")}
-              >Don't have an account? <span >Create one!</span></p>
+              >Don&apos;t have an account? <span >Create one!</span></p>
             </div>
           </div>
       </div>
