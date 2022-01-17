@@ -24,7 +24,7 @@ export default function SignIn({ providers}) {
 
   const handleSubmit = (e) =>{
     e.preventDefault()
-    signIn(providers.credentials.id, { username, password, callbackUrl: `${process.env.NEXTAUTH_URL}`})
+    signIn(providers.credentials.id, { email, password, callbackUrl: `${process.env.NEXTAUTH_URL}`})
   }
 
   return (
