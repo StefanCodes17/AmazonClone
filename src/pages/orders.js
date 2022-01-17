@@ -1,5 +1,5 @@
 import { getSession, useSession } from 'next-auth/react'
-import { connectToDatabase } from '../util/mongodb'
+import { connectToDatabase } from '../lib/mongodb'
 import Header from '../components/Header'
 import Order from '../components/Order'
 

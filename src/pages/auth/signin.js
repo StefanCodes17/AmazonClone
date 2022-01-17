@@ -15,10 +15,10 @@ const GoogleIcon = () =>(
   </div>
 )
 
-export default function SignIn({ providers, csrfToken}) {
+export default function SignIn({ providers}) {
   const router = useRouter()
 
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPass, setShowPass] = useState(false)
 
@@ -28,7 +28,7 @@ export default function SignIn({ providers, csrfToken}) {
   }
 
   return (
-    <div className="relative">
+    <div className="relative max-w-4xl m-auto">
         <div className="px-5 py-5 m-auto max-w-sm">
           <div className="flex items-center py-2 px-4 absolute top-5 left-5 m-auto">
             <Image 
@@ -45,15 +45,15 @@ export default function SignIn({ providers, csrfToken}) {
             onSubmit={handleSubmit}
             className="flex flex-col mt-6 max-w-xs m-auto"
             >
-              {/*Username Field */}
-              <label htmlFor="email" className="font-semibold text-sm">
+              {/*Email Field */}
+              <label htmlFor="email" className="font-semibold text-sm mb-2">
                   Email address
                 </label>
               <div className="flex border border-gray-300 rounded focus:shadow items-center" >
                 <input 
                 required
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
                 type="email" 
                 id="email" 
                 name="email"
@@ -76,7 +76,7 @@ export default function SignIn({ providers, csrfToken}) {
                   {!showPass ? <EyeIcon className="w-5 text-gray-300"/> : <EyeOffIcon className="w-5"/>}
                 </i>
               </div>
-              <button type="submit" className="button mt-4">Sign in with Email</button>
+              <button type="submit" className="button mt-4">Sign In</button>
             </form>
             <div className="mt-5 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXTAUTH_URL}`})}>
               <GoogleIcon/>

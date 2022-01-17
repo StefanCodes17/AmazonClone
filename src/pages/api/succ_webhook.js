@@ -1,5 +1,5 @@
 import {buffer} from 'micro'
-import { connectToDatabase } from '../../util/mongodb'
+import { connectToDatabase } from '../../lib/mongodb'
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 const endpointSecret = process.env.STRIPE_CLI_SECRET

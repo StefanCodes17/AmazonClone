@@ -46,6 +46,7 @@ const options = {
       }
       return true
     }
-  }}
+  }
+}
 
 export default (req, res) => NextAuth(req, res, options)
