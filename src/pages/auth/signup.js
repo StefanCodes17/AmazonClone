@@ -31,7 +31,7 @@ export default function SignUp({ providers}) {
   const handleSubmit = async (e) =>{
     e.preventDefault()
     setFormStatus({loading: true})
-    setFormStatus((await axios.post(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/signup`, {
+    setFormStatus((await axios.post(`/api/signup`, {
       email,
       password,
       confirmPassword
