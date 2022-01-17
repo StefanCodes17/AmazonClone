@@ -24,16 +24,66 @@ const validateEmail = (email) => {
       );
   };
 
+const validatePassword = (pass) =>{
+    const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+
+    return String(pass)
+            .match(        
+                strongRegex
+            )
+}
+
 function validateUser(email, password, confirmPassword){
-    let res = {}
+    let res = {
+        loading: false,
+    }
     if(!validateEmail(email)){
         res.email = {
-            "error":{
-                "message": "Not a valid email"
+            error:{
+                message: "Not a valid email"
             }
         }
+        return res
     }
-    return res
+   
+    if(password.length < 6){
+        res.password = {
+            error: {
+                message: "Password must be longer than 6 characters"
+            }
+        }
+        return res
+    }
+    
+    if(!validatePassword(password)){
+        res.password = {
+            error:{
+                message: "Password is not strong enough"
+            }
+        }
+        return res
+    }
+    if(password !== confirmPassword){
+        res.password = {
+            error:{
+                message: "Passwords must match!"
+            }
+        }
+        res.confirmPassword = {
+            error:{
+                message: "Passwords must match!"
+            }
+        }
+        return res
+    }
+        return {
+            status: 200,
+            loading: false,
+            success:{
+                messsage: `Welcome!, ${email}`
+            }
+        }
+
 }
 
 export default async (req, res)=>{

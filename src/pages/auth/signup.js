@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import {getProviders, signIn, getSession} from "next-auth/react"
 import Image from 'next/image'
 import { useRouter } from "next/router"
@@ -24,17 +25,53 @@ export default function SignUp({ providers}) {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPass, setShowPass] = useState(false)
   const [showConPass, setShowConPass] = useState(false)
-  const [formStatus, setFormStatus] = useState(null)
+  const [formStatus, setFormStatus] = useState({loading: false})
+  const [passwordStrength, setPasswordStrength] = useState("")
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = async (e) =>{
     e.preventDefault()
-    axios.post(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/signup`, {
+    setFormStatus({loading: true})
+    setFormStatus((await axios.post(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/signup`, {
       email,
       password,
       confirmPassword
-    }).then((res) => {
-      console.log(res)
-    })
+    })).data)
+  }
+
+  useEffect(()=>{
+    if(formStatus?.success){
+      setTimeout(()=>{
+        router.push("/auth/signin")
+      }, 750)
+    }
+  }, [formStatus])
+
+  const calculateStrength = (str)=>{
+    const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+    if(str.match(strongRegex)){
+      setPasswordStrength("strong")
+    }
+    else if(str.match(mediumRegex)){
+      setPasswordStrength("medium")
+    }else{
+      setPasswordStrength("weak")
+    }
+  }
+
+  const strengthConfig = {
+    strong: {
+      style: "bg-teal-100 border-t-4 mt-3 border-teal-600 rounded-b text-teal-900 px-4 py-3 shadow-md" ,
+      message: "Password is really strong!"
+    },
+    medium: {
+      style: "bg-yellow-100 border-t-4 mt-3 border-yellow-600 rounded-b text-yellow-900 px-4 py-3 shadow-md" ,
+      message: "Password not strong enough!"
+    },
+    weak: {
+      style: "bg-orange-100 border-t-4 mt-3 border-orange-600 rounded-b text-orange-900 px-4 py-3 shadow-md" ,
+      message: "Password is too weak!"
+    }
   }
 
   return (
@@ -59,25 +96,34 @@ export default function SignUp({ providers}) {
               <label htmlFor="email" className="font-semibold text-sm mb-2">
                   Email address
                 </label>
-              <div className="flex border border-gray-300 rounded focus:shadow items-center" >
+              <div className={`flex border ${!formStatus?.email?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`} >
                 <input 
+                disabled={formStatus?.loading}
                 required
                 value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
+                onChange={(e) => {
+                  setFormStatus({loading: false})
+                  setEmail(e.target.value)}} 
                 type="email" 
                 id="email" 
                 name="email"
                 className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
               </div>
+              {formStatus?.email?.error && <p className="text-xs mt-1 text-red-400 font-semibold">{formStatus.email.error.message}</p>} 
               {/*Password Field */}
               <label htmlFor="password" className= "font-semibold text-sm mt-4 mb-2">
                 Password
               </label>
-              <div className="flex border border-gray-300 rounded focus:shadow items-center">
+              <div className={`flex border ${!formStatus?.password?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`}>
                 <input
+                disabled={formStatus?.loading}
                 required
                 value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+                onChange={(e) => {
+                  setFormStatus({loading: false})
+                  setPassword(e.target.value)
+                  calculateStrength(e.target.value)
+                }} 
                 type={!showPass ? "password" : "text" }
                 id="password" 
                 name="password"
@@ -86,15 +132,29 @@ export default function SignUp({ providers}) {
                   {!showPass ? <EyeIcon className="w-5 text-gray-300"/> : <EyeOffIcon className="w-5"/>}
                 </i>
               </div>
+              {formStatus?.password?.error && <p className="text-xs mt-1 text-red-400 font-semibold">{formStatus.password.error.message}</p>} 
+              {/*Strength Password*/}
+              {!formStatus?.password?.error && passwordStrength && 
+                <div className={strengthConfig[passwordStrength].style} role="alert">
+                  <div className="flex">
+                    <div>
+                      <p className="text-sm">{strengthConfig[passwordStrength].message}</p>
+                    </div>
+                  </div>
+                </div>
+              }
               {/*Confirm Password Field */}
               <label htmlFor="password" className= "font-semibold text-sm mt-4 mb-2">
                 Confirm Password
               </label>
-              <div className="flex border border-gray-300 rounded focus:shadow items-center">
+              <div className={`flex border ${!formStatus?.confirmPassword?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`}>
                 <input
+                disabled={formStatus?.loading}
                 required
                 value={confirmPassword} 
-                onChange={(e) => setConfirmPassword(e.target.value)} 
+                onChange={(e) => {
+                  setFormStatus({loading: false})
+                  setConfirmPassword(e.target.value)}} 
                 type={!showConPass ? "password" : "text" }
                 id="password" 
                 name="password"
@@ -103,11 +163,22 @@ export default function SignUp({ providers}) {
                   {!showConPass ? <EyeIcon className="w-5 text-gray-300"/> : <EyeOffIcon className="w-5"/>}
                 </i>
               </div>
-              <button type="submit" className="button mt-4">Sign Up</button>
+              {formStatus?.confirmPassword?.error && <p className="text-xs mt-1 text-red-400 font-semibold">{formStatus.confirmPassword.error.message}</p>} 
+              <button type="submit" className="button mt-4" disabled={formStatus?.loading}>Sign Up</button>
             </form>
             <div className="mt-5 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXTAUTH_URL}`})}>
               <GoogleIcon/>
             </div>
+            {/*Success Notification*/}
+            {formStatus?.success && <div className="bg-teal-100 border-t-4 mt-3 border-teal-600 rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert">
+              <div className="flex">
+                <div className="py-1"><svg className="fill-current h-6 w-6 text-teal-600 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+                <div>
+                  <p className="font-bold">Welcome!</p>
+                  <p className="text-sm">Successfully made an account!</p>
+                </div>
+              </div>
+            </div>}
             <div className="w-full flex items-center justify-between">
                 <hr className="mt-3 w-28"></hr> 
                 <p className="text-sm pt-1 text-gray-500">or</p>
