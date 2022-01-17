@@ -29,7 +29,7 @@ const Product = ({id, title, price, description, category, image, setShow}) => {
             </div>
             <p className='text-xs mt-2 my-2 line-clamp-2'>{description}</p>
             <div className='mb-5'>
-                ${price}
+                {new Intl.NumberFormat('en-IN', {currency: "USD", style:"currency"}).format(price)}
             </div>
             {hasPrime && (
                 <div className='flex items-center space-x-2 -mt-5'>

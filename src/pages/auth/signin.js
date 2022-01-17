@@ -1,4 +1,4 @@
-import {getProviders, signIn, getCsrfToken, useSession} from "next-auth/react"
+import {getProviders, signIn, getSession} from "next-auth/react"
 import Image from 'next/image'
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -15,10 +15,14 @@ const GoogleIcon = () =>(
 )
 
 export default function SignIn({ providers, csrfToken}) {
-
+  const router = useRouter()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
+  const handleSubmit = (e) =>{
+    e.preventDefault()
+    signIn(providers.credentials.id, { username, password, callbackUrl: `${process.env.NEXTAUTH_URL}`})
+  }
 
   return (
     <div className="relative">
@@ -35,10 +39,9 @@ export default function SignIn({ providers, csrfToken}) {
           <div className=" px-8 py-10 mt-5">
             <h1 className="font-semibold font-sans text-xl text-center">Log into your Account</h1>
             <form 
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleSubmit}
             className="flex flex-col mt-6 max-w-xs m-auto"
             >
-              <input type="csrfToken" type="hidden" defaultValue={csrfToken}></input>
               <label htmlFor="email" className="font-semibold text-sm">
                 Email address
               </label>
@@ -49,7 +52,7 @@ export default function SignIn({ providers, csrfToken}) {
               type="email" 
               id="email" 
               name="email" 
-              className="border border-gray-300 rounded focus:outline-none focus:shadow pl-2" />
+              className="border border-gray-300 rounded focus:outline-none focus:shadow pl-2 py-1 mt-1" />
               <label htmlFor="password" className= "font-semibold text-sm">
                 Password
               </label>
@@ -60,12 +63,22 @@ export default function SignIn({ providers, csrfToken}) {
               type="password" 
               id="password" 
               name="password" 
-              className="border border-gray-300 rounded focus:outline-none focus:shadow pl-2"/>
-              <button type="submit" className="button mt-4" onClick={() => signIn(providers.credentials.id, { username, password, callbackUrl: `${process.env.NEXTAUTH_URL}`})}>Sign in with Email</button>
+              className="border border-gray-300 rounded focus:outline-none focus:shadow pl-2 py-1 mt-1"/>
+              <button type="submit" className="button mt-4">Sign in with Email</button>
             </form>
-            <hr className="mt-3"></hr>
-            <div className="mt-3 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXTAUTH_URL}`})}>
+            <div className="mt-5 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXTAUTH_URL}`})}>
               <GoogleIcon/>
+            </div>
+            <div className="w-full flex items-center justify-between">
+                <hr className="mt-3 w-28"></hr> 
+                <p className="text-sm pt-1 text-gray-500">or</p>
+                <hr className="mt-3 w-28"></hr>
+            </div>
+            <div>
+              <p 
+              className="text-sm text-gray-800 hover:underline underline-offset-2 cursor-pointer"
+              onClick={() => router.push("/auth/signup")}
+              >Don't have an account? <span >Create one!</span></p>
             </div>
           </div>
       </div>
@@ -74,11 +87,19 @@ export default function SignIn({ providers, csrfToken}) {
 }
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context)
+  if(session?.user){
+    return{
+      redirect:{
+        permanent: false,
+        destination: "/"
+      }
+    }
+  }
+
   const providers = await getProviders()
-  const csrfToken = await getCsrfToken()
   return {
     props: {
-      csrfToken,
       providers
     },
   }
