@@ -144,7 +144,7 @@ export default function SignUp({ providers}) {
                 </div>
               }
               {/*Confirm Password Field */}
-              <label htmlFor="password" className= "font-semibold text-sm mt-4 mb-2">
+              <label htmlFor="confirmPassword" className= "font-semibold text-sm mt-4 mb-2">
                 Confirm Password
               </label>
               <div className={`flex border ${!formStatus?.confirmPassword?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`}>
@@ -156,8 +156,8 @@ export default function SignUp({ providers}) {
                   setFormStatus({loading: false})
                   setConfirmPassword(e.target.value)}} 
                 type={!showConPass ? "password" : "text" }
-                id="password" 
-                name="password"
+                id="confirmPassword" 
+                name="confirmPassword"
                 className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"/>
                 <i className="flex-end px-2 cursor-pointer" onClick={() => setShowConPass(!showConPass)}>
                   {!showConPass ? <EyeIcon className="w-5 text-gray-300"/> : <EyeOffIcon className="w-5"/>}

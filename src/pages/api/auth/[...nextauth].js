@@ -21,11 +21,15 @@ const options = {
         async authorize(credentials, req) {
           const {email, password} = credentials
           // Add logic here to look up the user from the credentials supplied
-          const user = { id: 1, name: "J Smith", email: "jsmith@example.com" }
+          const testUser = {
+            name: "Joe User",
+            email: "joeUser@user.com",
+            password: "><securePassword><"
+          }
     
-          if (user) {
+          if (email === testUser.email && password === testUser.password) {
             // Any object returned will be saved in `user` property of the JWT
-            return user
+            return testUser
           } else {
             // If you return null then an error will be displayed advising the user to check their details.
             return null

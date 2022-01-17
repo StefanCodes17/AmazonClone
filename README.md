@@ -20,7 +20,7 @@ To test consumer user info go to sign in [https://amazon-clone-xi-roan.vercel.ap
 
 ```bash
 Email: joeUser@user.com
-Password: securePassword
+Password: ><123SecurePassword*><
 ```
 
 ## Deploy on Vercel
