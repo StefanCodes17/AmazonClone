@@ -1,5 +1,6 @@
-import {getProviders, signIn} from "next-auth/react"
+import {getProviders, signIn, getCsrfToken, useSession} from "next-auth/react"
 import Image from 'next/image'
+import { useRouter } from "next/router"
 import { useState } from "react"
 
 const GoogleIcon = () =>(
@@ -13,10 +14,12 @@ const GoogleIcon = () =>(
   </div>
 )
 
-export default function SignIn({ csrfToken , providers}) {
-  const [username, setUsername] = useState()
-  const [password, setPassword] = useState()
-  
+export default function SignIn({ providers, csrfToken}) {
+
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+
+
   return (
     <div className="relative">
         <div className="px-5 py-5 m-auto max-w-sm">
@@ -31,16 +34,34 @@ export default function SignIn({ csrfToken , providers}) {
           </div>
           <div className=" px-8 py-10 mt-5">
             <h1 className="font-semibold font-sans text-xl text-center">Log into your Account</h1>
-            <form className="flex flex-col mt-6 max-w-xs m-auto">
+            <form 
+            onSubmit={(e) => e.preventDefault()}
+            className="flex flex-col mt-6 max-w-xs m-auto"
+            >
+              <input type="csrfToken" type="hidden" defaultValue={csrfToken}></input>
               <label htmlFor="email" className="font-semibold text-sm">
                 Email address
               </label>
-              <input type="email" id="email" name="email" className="border border-gray-300 rounded focus:outline-none focus:shadow" />
+              <input 
+              required
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+              type="email" 
+              id="email" 
+              name="email" 
+              className="border border-gray-300 rounded focus:outline-none focus:shadow pl-2" />
               <label htmlFor="password" className= "font-semibold text-sm">
                 Password
               </label>
-              <input type="password" id="password" name="password" className="border border-gray-300 rounded focus:outline-none focus:shadow"/>
-              <button type="submit" className="button mt-4">Sign in with Email</button>
+              <input
+              required
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              type="password" 
+              id="password" 
+              name="password" 
+              className="border border-gray-300 rounded focus:outline-none focus:shadow pl-2"/>
+              <button type="submit" className="button mt-4" onClick={() => signIn(providers.credentials.id, { username, password, callbackUrl: `${process.env.NEXTAUTH_URL}`})}>Sign in with Email</button>
             </form>
             <hr className="mt-3"></hr>
             <div className="mt-3 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXTAUTH_URL}`})}>
@@ -54,18 +75,11 @@ export default function SignIn({ csrfToken , providers}) {
 
 export async function getServerSideProps(context) {
   const providers = await getProviders()
+  const csrfToken = await getCsrfToken()
   return {
     props: {
+      csrfToken,
       providers
     },
   }
 }
-
-/*
-// If older than Next.js 9.3
-SignIn.getInitialProps = async (context) => {
-  return {
-    csrfToken: await getCsrfToken(context)
-  }
-}
-*/

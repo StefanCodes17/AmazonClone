@@ -3,20 +3,23 @@ import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 const options = {
-  // Configure one or more authentication providers
+  session: { 
+    strategy: "jwt" 
+  },
   providers: [
     GoogleProvider({
         clientId: process.env.CLIENT_GOOGLE_ID,
         clientSecret: process.env.CLIENT_GOOGLE_SECRET,
       }),
       CredentialsProvider({
+        id: "credentials",
         name: "",
         credentials: {
-          username: { label: "Username", type: "text", placeholder: "jsmith" },
-          password: { label: "Password", type: "password" }
+          username: { label: "username", type: "text", placeholder: "jsmith" },
+          password: { label: "password", type: "password" }
         },
         async authorize(credentials, req) {
-          console.log(credentials)
+          const {username, password} = credentials
           // Add logic here to look up the user from the credentials supplied
           const user = { id: 1, name: "J Smith", email: "jsmith@example.com" }
     
@@ -33,7 +36,7 @@ const options = {
       })
   ],
   pages: {
-    signIn: '/signin',
+    signIn: '/auth/signin',
   },
   secret: process.env.NX_SECRET,
   callbacks: {
@@ -43,7 +46,6 @@ const options = {
       }
       return true
     }
-  }
-}
+  }}
 
 export default (req, res) => NextAuth(req, res, options)
