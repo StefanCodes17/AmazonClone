@@ -27,17 +27,17 @@ export default function SignIn({ providers, csrfToken}) {
   return (
     <div className="relative">
         <div className="px-5 py-5 m-auto max-w-sm">
-          <div className="bg-amazon_blue flex align-center justify-center py-2 px-4 absolute top-0 left-0 w-full">
+          <div className="flex items-center py-2 px-4 absolute top-5 left-5 m-auto">
             <Image 
-                          src={"https://links.papareact.com/f90"} 
-                          width={150}
-                          height={40}
+                          src={"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png"} 
+                          width={130}
+                          height={30}
                           objectFit='contain'
                           className='cursor-pointer'
                           />
           </div>
           <div className=" px-8 py-10 mt-5">
-            <h1 className="font-semibold font-sans text-xl text-center">Log into your Account</h1>
+            <h1 className="font-semibold font-sans text-xl">Log into your Account</h1>
             <form 
             onSubmit={handleSubmit}
             className="flex flex-col mt-6 max-w-xs m-auto"
