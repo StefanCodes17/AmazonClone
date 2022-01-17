@@ -77,7 +77,7 @@ export default function SignUp({ providers}) {
   return (
     <div className="relative max-w-4xl m-auto">
         <div className="px-5 py-5 m-auto max-w-sm">
-          <div className="flex items-center py-2 px-4 absolute top-5 left-5 m-auto">
+          <div className="flex items-center py-2 px-4 absolute top-5 left-5 m-auto" onClick={()=>router.push("/")}>
             <Image 
                           src={"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png"} 
                           width={130}
