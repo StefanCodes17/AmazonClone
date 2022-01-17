@@ -119,7 +119,7 @@ export default async (req, res)=>{
                         password: hash,
                         orders: []
                         }).then(()=>{
-                            res.json(data)
+                            return res.json(data)
                         })
                 });
             }
