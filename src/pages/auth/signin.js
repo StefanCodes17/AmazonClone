@@ -57,7 +57,7 @@ export default function SignIn({ providers}) {
                 type="email" 
                 id="email" 
                 name="email"
-                className="flex-grow focus:outline-none px-2 py-1 mt-1"  />
+                className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
               </div>
               {/*Password Field */}
               <label htmlFor="password" className= "font-semibold text-sm mt-4 mb-2">
@@ -71,7 +71,7 @@ export default function SignIn({ providers}) {
                 type={!showPass ? "password" : "text" }
                 id="password" 
                 name="password"
-                className="flex-grow focus:outline-none px-2 py-1 mt-1"/>
+                className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"/>
                 <i className="flex-end px-2 cursor-pointer" onClick={() => setShowPass(!showPass)}>
                   {!showPass ? <EyeIcon className="w-5 text-gray-300"/> : <EyeOffIcon className="w-5"/>}
                 </i>
