@@ -111,16 +111,20 @@ export default async (req, res)=>{
             }
             if(!existingUser){
                 bcrypt.hash(password, 15, function(err, hash) {
-                    db.collection("users").insertOne({
-                        email,
-                        name: email.split("@")[0],
-                        email_verified: false,
-                        picture: "/",
-                        password: hash,
-                        orders: []
-                        }).then(()=>{
-                            return res.json(data)
-                        })
+                    try{
+                        db.collection("users").insertOne({
+                            email,
+                            name: email.split("@")[0],
+                            email_verified: false,
+                            picture: "/",
+                            password: hash,
+                            orders: []
+                            }).then(()=>{
+                                return res.json(data)
+                            })
+                    }catch(e){
+                        console.log(`Error adding user to db: ${e.message}`)
+                    }
                 });
             }
         }

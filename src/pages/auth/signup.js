@@ -120,6 +120,7 @@ export default function SignUp({ providers}) {
                 required
                 value={password} 
                 onChange={(e) => {
+                  setShowPass(false)
                   setFormStatus({loading: false})
                   setPassword(e.target.value)
                   calculateStrength(e.target.value)
@@ -153,6 +154,7 @@ export default function SignUp({ providers}) {
                 required
                 value={confirmPassword} 
                 onChange={(e) => {
+                  setConfirmPassword(false)
                   setFormStatus({loading: false})
                   setConfirmPassword(e.target.value)}} 
                 type={!showConPass ? "password" : "text" }
