@@ -15,7 +15,7 @@ const options = {
         id: "credentials",
         name: "",
         credentials: {
-          username: { label: "username", type: "text", placeholder: "jsmith" },
+          email: { label: "email", type: "text", placeholder: "jsmith" },
           password: { label: "password", type: "password" }
         },
         async authorize(credentials, req) {
