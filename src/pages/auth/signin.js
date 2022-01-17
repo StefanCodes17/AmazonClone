@@ -2,6 +2,7 @@ import {getProviders, signIn, getSession} from "next-auth/react"
 import Image from 'next/image'
 import { useRouter } from "next/router"
 import { useState } from "react"
+import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid"
 
 const GoogleIcon = () =>(
     <div>
@@ -16,8 +17,10 @@ const GoogleIcon = () =>(
 
 export default function SignIn({ providers, csrfToken}) {
   const router = useRouter()
+
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [showPass, setShowPass] = useState(false)
 
   const handleSubmit = (e) =>{
     e.preventDefault()
@@ -42,28 +45,37 @@ export default function SignIn({ providers, csrfToken}) {
             onSubmit={handleSubmit}
             className="flex flex-col mt-6 max-w-xs m-auto"
             >
+              {/*Username Field */}
               <label htmlFor="email" className="font-semibold text-sm">
-                Email address
-              </label>
-              <input 
-              required
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} 
-              type="email" 
-              id="email" 
-              name="email" 
-              className="border border-gray-300 rounded focus:outline-none focus:shadow pl-2 py-1 mt-1" />
-              <label htmlFor="password" className= "font-semibold text-sm">
+                  Email address
+                </label>
+              <div className="flex border border-gray-300 rounded focus:shadow items-center" >
+                <input 
+                required
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
+                type="email" 
+                id="email" 
+                name="email"
+                className="flex-grow focus:outline-none px-2 py-1 mt-1"  />
+              </div>
+              {/*Password Field */}
+              <label htmlFor="password" className= "font-semibold text-sm mt-4 mb-2">
                 Password
               </label>
-              <input
-              required
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              type="password" 
-              id="password" 
-              name="password" 
-              className="border border-gray-300 rounded focus:outline-none focus:shadow pl-2 py-1 mt-1"/>
+              <div className="flex border border-gray-300 rounded focus:shadow items-center">
+                <input
+                required
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                type={!showPass ? "password" : "text" }
+                id="password" 
+                name="password"
+                className="flex-grow focus:outline-none px-2 py-1 mt-1"/>
+                <i className="flex-end px-2 cursor-pointer" onClick={() => setShowPass(!showPass)}>
+                  {!showPass ? <EyeIcon className="w-5 text-gray-300"/> : <EyeOffIcon className="w-5"/>}
+                </i>
+              </div>
               <button type="submit" className="button mt-4">Sign in with Email</button>
             </form>
             <div className="mt-5 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXTAUTH_URL}`})}>
