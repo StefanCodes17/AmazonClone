@@ -89,7 +89,7 @@ export default function SignUp({ providers}) {
                 </label>
               <div className={`${formStatus?.loading ? "justify-center opacity-40": null} flex border ${!formStatus?.email?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`} >
                 {
-                  formStatus?.loading ? (
+                  !formStatus?.loading ? (
                     <>
                         <input 
                     disabled={formStatus?.loading}
@@ -115,7 +115,7 @@ export default function SignUp({ providers}) {
               </label>
               <div className={`${formStatus?.loading ? "justify-center opacity-40": null} flex border ${!formStatus?.password?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`}>
                 {
-                  formStatus?.loading ? (
+                  !formStatus?.loading ? (
                     <>
                       <input
                   disabled={formStatus?.loading}
