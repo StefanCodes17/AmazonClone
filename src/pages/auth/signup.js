@@ -87,42 +87,58 @@ export default function SignUp({ providers}) {
               <label htmlFor="email" className="font-semibold text-sm mb-2">
                   Email address
                 </label>
-              <div className={`flex border ${!formStatus?.email?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`} >
-                <input 
-                disabled={formStatus?.loading}
-                required
-                value={email} 
-                onChange={(e) => {
-                  setFormStatus({loading: false})
-                  setEmail(e.target.value)}} 
-                type="email" 
-                id="email" 
-                name="email"
-                className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
+              <div className={`${formStatus?.loading ? "justify-center opacity-40": null} flex border ${!formStatus?.email?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`} >
+                {
+                  formStatus?.loading ? (
+                    <>
+                        <input 
+                    disabled={formStatus?.loading}
+                    required
+                    value={email} 
+                    onChange={(e) => {
+                      setFormStatus({loading: false})
+                      setEmail(e.target.value)}} 
+                    type="email" 
+                    id="email" 
+                    name="email"
+                    className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
+                    </>
+                  ):(
+                    <Loader size="sm"/>
+                  )
+                }
               </div>
               {formStatus?.email?.error && <p className="text-xs mt-1 text-red-400 font-semibold">{formStatus.email.error.message}</p>} 
               {/*Password Field */}
               <label htmlFor="password" className= "font-semibold text-sm mt-4 mb-2">
                 Password
               </label>
-              <div className={`flex border ${!formStatus?.password?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`}>
-                <input
-                disabled={formStatus?.loading}
-                required
-                value={password} 
-                onChange={(e) => {
-                  setShowPass(false)
-                  setFormStatus({loading: false})
-                  setPassword(e.target.value)
-                  calculateStrength(e.target.value)
-                }} 
-                type={!showPass ? "password" : "text" }
-                id="password" 
-                name="password"
-                className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"/>
-                <i className="flex-end px-2 cursor-pointer flex-end" onClick={() => setShowPass(!showPass)}>
-                  {!showPass ? <EyeIcon className="w-5 text-gray-300"/> : <EyeOffIcon className="w-5"/>}
-                </i>
+              <div className={`${formStatus?.loading ? "justify-center opacity-40": null} flex border ${!formStatus?.password?.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`}>
+                {
+                  formStatus?.loading ? (
+                    <>
+                      <input
+                  disabled={formStatus?.loading}
+                  required
+                  value={password} 
+                  onChange={(e) => {
+                    setShowPass(false)
+                    setFormStatus({loading: false})
+                    setPassword(e.target.value)
+                    calculateStrength(e.target.value)
+                  }} 
+                  type={!showPass ? "password" : "text" }
+                  id="password" 
+                  name="password"
+                  className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"/>
+                  <i className="flex-end px-2 cursor-pointer flex-end" onClick={() => setShowPass(!showPass)}>
+                    {!showPass ? <EyeIcon className="w-5 text-gray-300"/> : <EyeOffIcon className="w-5"/>}
+                  </i>
+                    </>
+                  ):(
+                    <Loader size="sm" />
+                  )
+                }
               </div>
               {formStatus?.password?.error && <p className="text-xs mt-1 text-red-400 font-semibold">{formStatus.password.error.message}</p>} 
               {/*Strength Password*/}
