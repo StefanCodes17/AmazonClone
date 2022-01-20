@@ -26,6 +26,7 @@ const fulfillOrder = async (session)=>{
 
 export default async (req, res)=>{
     if(req.method === "POST"){
+        console.log("Doing success webhook")
         const reqBuffer = await buffer(req)
         const payload = reqBuffer.toString()
         const signature = req.headers["stripe-signature"]
