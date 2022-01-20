@@ -168,9 +168,6 @@ export default function SignUp({ providers}) {
               {formStatus?.confirmPassword?.error && <p className="text-xs mt-1 text-red-400 font-semibold">{formStatus.confirmPassword.error.message}</p>} 
               <button type="submit" className="button mt-4" disabled={formStatus?.loading}>Sign Up</button>
             </form>
-            <div className="mt-5 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXTAUTH_URL}`})}>
-              <GoogleIcon/>
-            </div>
             {/*Success Notification*/}
             {formStatus?.account?.success && <div className="bg-teal-100 border-t-4 mt-3 border-teal-600 rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert">
               <div className="flex">

@@ -2,7 +2,7 @@ import {buffer} from 'micro'
 import { connectToDatabase } from '../../lib/mongodb'
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
-const endpointSecret = process.env.STRIPE_CLI_SECRET
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 
 const fulfillOrder = async (session)=>{
     const { db } = await connectToDatabase();

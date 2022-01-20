@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import {MenuIcon, ShoppingCartIcon, SearchIcon } from '@heroicons/react/outline'
 import {signIn, signOut, useSession} from "next-auth/react"
 import {useRouter} from "next/router"
