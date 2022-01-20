@@ -1,4 +1,3 @@
-import {buffer} from 'micro'
 import { connectToDatabase } from '../../lib/mongodb'
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
@@ -26,9 +25,7 @@ const fulfillOrder = async (session)=>{
 
 export default async (req, res)=>{
     if(req.method === "POST"){
-        console.log("Doing success webhook")
-        const reqBuffer = await buffer(req)
-        const payload = reqBuffer.toString()
+        const payload = req.rawBody.toString()
         const signature = req.headers["stripe-signature"]
 
         let event;
