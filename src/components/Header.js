@@ -39,14 +39,16 @@ const Header = () => {
         <header>
             {/*Top Nav*/}
             <div className='flex items-center bg-amazon_blue p-1 flex-grow py-2'>
-                <div className='mt-2 flex items-center flex-grow sm:flex-grow-0' onClick={()=> router.push("/")}>
-                    <Image 
-                    src={"https://links.papareact.com/f90"} 
-                    width={150}
-                    height={40}
-                    objectFit='contain'
-                    className='cursor-pointer'
-                    />
+                <div className='mt-2 flex items-center flex-grow sm:flex-grow-0'>
+                    <Link href="/" replace={true}>
+                        <Image 
+                        src={"https://links.papareact.com/f90"} 
+                        width={150}
+                        height={40}
+                        objectFit='contain'
+                        className='cursor-pointer'
+                        />
+                    </Link>
                 </div>
 
                 <div className='hidden sm:flex items-center h-10 rounded-md bg-yellow-400 hover:bg-yellow-500 cursor-pointer flex-grow'>
@@ -60,17 +62,21 @@ const Header = () => {
                             {session ? `Hello, ${session.user.name}` : `Sign In`}</p>
                         <p className="font-extrabold md:text-sm">Account & Lists</p>
                     </div>
-                    <div className="main_link" onClick={()=>router.push('/orders')}>
-                        <p>Returns</p>
-                        <p className="font-extrabold md:text-sm">& Orders</p>
-                    </div>
-                    <div className=" relative main_link flex items-center" onClick={()=> router.push("/checkout")}>
-                        <span className="absolute top-0 right-0 md:right-6 h-4 w-4 bg-yellow-400 rounded-full text-black font-bold text-center">
-                            {items.length}
-                        </span>
-                        <ShoppingCartIcon className="h-10"/>
-                        <p className="hidden md:inline font-extrabold md:text-sm mt-2">Cart</p>
-                    </div>
+                    <Link href="/orders">
+                        <div className="main_link">
+                            <p>Returns</p>
+                            <p className="font-extrabold md:text-sm">& Orders</p>
+                        </div>
+                    </Link>
+                    <Link href="/checkout">
+                        <div className=" relative main_link flex items-center">
+                            <span className="absolute top-0 right-0 md:right-6 h-4 w-4 bg-yellow-400 rounded-full text-black font-bold text-center">
+                                {items.length}
+                            </span>
+                            <ShoppingCartIcon className="h-10"/>
+                            <p className="hidden md:inline font-extrabold md:text-sm mt-2">Cart</p>
+                        </div>
+                    </Link>
                 </div>
 
             </div>

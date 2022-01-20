@@ -33,6 +33,7 @@ export default async (req, res)=>{
 
         let event;
         try{
+            console.log(payload, signature, endpointSecret)
             event = stripe.webhooks.constructEvent(payload, signature, endpointSecret)
         }catch(err){
             console.log(`Webhook error: ${err.message}`)
