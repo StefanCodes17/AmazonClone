@@ -96,36 +96,33 @@ export default async (req, res)=>{
     if(req.method === "POST"){
         const {email, password, confirmPassword} = req.body
         const {error, ...data} = validateUser(email, password, confirmPassword)
-        if(!error){
-            const { db } = await connectToDatabase();
-            if(!db) throw Error("Failure to connect to database")
-            const existingUser = await db.collection("users").findOne({email: email})
-            if(existingUser){
-               return res.json({
-                    account:{
-                        error: {
-                            message: "An account is already assocaited with this email"
-                        }
+        if(error) return res.json(data)
+        const { db } = await connectToDatabase();
+        if(!db) throw Error("Failure to connect to database")
+        const existingUser = await db.collection("users").findOne({email: email})
+        if(existingUser){
+            return res.json({
+                account:{
+                    error: {
+                         message: "An account is already assocaited with this email"
                     }
-                })
-            }else{
-                bcrypt.hash(password, 15, function(err, hash) {
-                    console.log('Hashing')
-                    try{
-                        return db.collection("users").insertOne({
-                            email,
-                            name: email.split("@")[0],
-                            email_verified: false,
-                            picture: "/",
-                            password: hash,
-                            orders: []
-                            }).then(()=>res.status(200).json(data))
-                    }catch(e){
-                        console.log(`Error adding user to db: ${e.message}`)
-                    }
-                });
-            }
+                }
+            })
         }
-        return res.json(data)
+        bcrypt.hash(password, 15, async function(err, hash) {
+            try{
+                const {acknowledged} = await db.collection("users").insertOne({
+                    email,
+                    name: email.split("@")[0],
+                    email_verified: false,
+                    picture: "/",
+                    password: hash,
+                    orders: []
+                    })
+                if(acknowledged) return res.status(200).json(data)
+            }catch(e){
+                console.log(`Error adding user to db: ${e.message}`)
+            }
+        });
     }
 }
