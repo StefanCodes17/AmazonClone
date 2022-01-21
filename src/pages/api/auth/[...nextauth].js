@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
-import {AddUser} from '../../../util/User'
+import {AddUser, SignInUser} from '../../../util/User'
 
 const options = {
   session: { 
@@ -21,22 +21,7 @@ const options = {
         },
         async authorize(credentials, req) {
           const {email, password} = credentials
-          // Add logic here to look up the user from the credentials supplied
-          const testUser = {
-            name: "Joe User",
-            email: "joeUser@user.com",
-            password: "><123SecurePassword*><"
-          }
-    
-          if (email === testUser.email && password === testUser.password) {
-            // Any object returned will be saved in `user` property of the JWT
-            return testUser
-          } else {
-            // If you return null then an error will be displayed advising the user to check their details.
-            return null
-            
-            // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter        
-          }
+          return SignInUser(email, password)
         }
       })
   ],

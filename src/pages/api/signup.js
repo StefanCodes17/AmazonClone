@@ -125,8 +125,6 @@ function validateUser(email, password, confirmPassword){
 
 export default async (req, res)=>{
     if(req.method === "POST"){
-        const session = await getSession({req})
-        console.log(session)
         const {email, password, confirmPassword} = req.body
         const {error, ...data} = validateUser(email, password, confirmPassword)
         if(error) return res.json(data)

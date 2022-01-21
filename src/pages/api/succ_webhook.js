@@ -28,9 +28,6 @@ const fulfillOrder = async (session)=>{
 
 export default async (req, res)=>{
     if(req.method === "POST"){
-        const session = await getSession({ req })
-        if(!session) return res.status(401).send("Unauthorized request")
-
         const reqBuffer = await buffer(req)
         const payload = reqBuffer.toString()
         const signature = req.headers["stripe-signature"]
