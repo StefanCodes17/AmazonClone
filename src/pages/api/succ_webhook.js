@@ -1,5 +1,7 @@
 import {buffer} from 'micro'
 import { connectToDatabase } from '../../lib/mongodb'
+import { getSession } from "next-auth/react"
+
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
@@ -26,6 +28,9 @@ const fulfillOrder = async (session)=>{
 
 export default async (req, res)=>{
     if(req.method === "POST"){
+        const session = await getSession({ req })
+        if(!session) return res.status(401).send("Unauthorized request")
+
         const reqBuffer = await buffer(req)
         const payload = reqBuffer.toString()
         const signature = req.headers["stripe-signature"]
@@ -38,10 +43,14 @@ export default async (req, res)=>{
             return res.status(400).send(`Webhook error: ${err.message}`)
         }
         if(event.type === "checkout.session.completed"){
-            const session = event.data.object
-            return fulfillOrder(session).then(()=> res.status(200)).catch(err => res.status(400).send(`Webhook error: ${err.message}`))
+            const sess = event.data.object
+            return fulfillOrder(sess).then(()=> res.status(200)).catch(err => res.status(400).send(`Webhook error: ${err.message}`))
         }
     }
+    if (req.method !== "POST") {
+        res.status(405).send("Unauthorized method access to endpoint")
+        return;
+      }
 }
 
 export const config = {

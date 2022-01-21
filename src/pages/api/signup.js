@@ -1,4 +1,5 @@
 import { connectToDatabase } from '../../lib/mongodb'
+import { getSession } from "next-auth/react"
 import bcrypt from 'bcrypt'
 
 /*
@@ -36,6 +37,36 @@ const validatePassword = (pass) =>{
 
 function validateUser(email, password, confirmPassword){
     let res = {}
+    if(!email){
+        res.error = true
+        res.email = {
+            error:{
+                message: "Please enter an email"
+            }
+        }
+        return res
+    }
+
+    if(!password){
+        res.error = true
+        res.password = {
+            error:{
+                message: "Please enter a password"
+            }
+        }
+        return res
+    }
+
+    if(!confirmPassword){
+        res.error = true
+        res.confirmPassword = {
+            error:{
+                message: "Please enter a confirm password"
+            }
+        }
+        return res
+    }
+
     if(!validateEmail(email)){
         res.error = true
         res.email = {
@@ -94,6 +125,8 @@ function validateUser(email, password, confirmPassword){
 
 export default async (req, res)=>{
     if(req.method === "POST"){
+        const session = await getSession({req})
+        console.log(session)
         const {email, password, confirmPassword} = req.body
         const {error, ...data} = validateUser(email, password, confirmPassword)
         if(error) return res.json(data)

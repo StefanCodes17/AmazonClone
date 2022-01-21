@@ -21,6 +21,7 @@ export default function SignUp({ providers}) {
 
   const handleSubmit = async (e) =>{
     e.preventDefault()
+    setPasswordStrength("")
     setFormStatus({loading: true})
     setFormStatus((await axios.post(`/api/signup`, {
       email,
@@ -142,7 +143,7 @@ export default function SignUp({ providers}) {
               </div>
               {formStatus?.password?.error && <p className="text-xs mt-1 text-red-400 font-semibold">{formStatus.password.error.message}</p>} 
               {/*Strength Password*/}
-              {!formStatus?.password?.error && passwordStrength && 
+              {!formStatus?.password?.error && passwordStrength != "" && 
                 <div className={strengthConfig[passwordStrength].style} role="alert">
                   <div className="flex">
                     <div>
