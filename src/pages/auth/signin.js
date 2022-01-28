@@ -2,6 +2,7 @@ import {getProviders, signIn, getSession} from "next-auth/react"
 import Image from 'next/image'
 import { useRouter } from "next/router"
 import { useState } from "react"
+import {Loader} from '../../svgAssets/assets'
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid"
 
 const GoogleIcon = () =>(
@@ -17,13 +18,16 @@ const GoogleIcon = () =>(
 
 export default function SignIn({ providers}) {
   const router = useRouter()
+  const { query } = useRouter();
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPass, setShowPass] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = (e) =>{
     e.preventDefault()
+    setLoading(true)
     signIn(providers.credentials.id, { email, password, callbackUrl: `${process.env.NEXTAUTH_URL}`})
   }
 
@@ -49,21 +53,23 @@ export default function SignIn({ providers}) {
               <label htmlFor="email" className="font-semibold text-sm mb-2">
                   Email address
                 </label>
-              <div className="flex border border-gray-300 rounded focus:shadow items-center" >
-                <input 
+              <div className={`${loading ? "justify-center opacity-40": null} flex border ${!query.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`} >
+                {!loading ? <input 
                 required
                 value={email} 
                 onChange={(e) => setEmail(e.target.value)} 
                 type="email" 
                 id="email" 
                 name="email"
-                className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  />
+                className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"  /> : <Loader size="sm"/>}
               </div>
               {/*Password Field */}
               <label htmlFor="password" className= "font-semibold text-sm mt-4 mb-2">
                 Password
               </label>
-              <div className="flex border border-gray-300 rounded focus:shadow items-center">
+              <div className={`${loading ? "justify-center opacity-40": null} flex border ${!query.error ? "border-gray-300" : "border-red-300"} rounded focus:shadow items-center`}>
+              {!loading ? 
+              <>
                 <input
                 required
                 value={password} 
@@ -71,16 +77,28 @@ export default function SignIn({ providers}) {
                 type={!showPass ? "password" : "text" }
                 id="password" 
                 name="password"
-                className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"/>
+                className="flex-grow focus:outline-none px-2 py-1 mt-1 w-full"/> 
                 <i className="flex-end px-2 cursor-pointer" onClick={() => setShowPass(!showPass)}>
                   {!showPass ? <EyeIcon className="w-5 text-gray-300"/> : <EyeOffIcon className="w-5"/>}
                 </i>
+              </>: <Loader size="sm"/>}
               </div>
               <button type="submit" className="button mt-4">Sign In</button>
             </form>
             <div className="mt-5 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXTAUTH_URL}`})}>
               <GoogleIcon/>
             </div>
+            {query.error && (
+            <div className="bg-red-100 border-t-4 mt-3 border-red-600 rounded-b text-red-900 px-4 py-3 shadow-md" role="alert">
+              <div className="flex">
+                <div className="py-1"><svg className="fill-current h-6 w-6 text-red-600 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+                <div>
+                  <p className="font-bold">Error</p>
+                  <p className="text-sm">Incorrect credentials</p>
+                </div>
+              </div>
+            </div>
+            )}
             <div className="w-full flex items-center justify-between">
                 <hr className="mt-3 w-28"></hr> 
                 <p className="text-sm pt-1 text-gray-500">or</p>
