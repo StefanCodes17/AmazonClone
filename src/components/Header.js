@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import {MenuIcon, ShoppingCartIcon, SearchIcon } from '@heroicons/react/outline'
-import {signIn, signOut, useSession} from "next-auth/react"
+import {signIn, useSession} from "next-auth/react"
 import {useRouter} from "next/router"
 import { useSelector } from 'react-redux'
 import { selectItems } from '../slices/basketSlice'
@@ -57,7 +57,7 @@ const Header = () => {
                 </div>
 
                 <div className='text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap'>
-                    <div className="main_link" onClick={!session ? signIn : signOut}>
+                    <div className="main_link" onClick={() => !session ? signIn() : router.push("/profile")}>
                         <p>
                             {session ? `Hello, ${session.user.name}` : `Sign In`}</p>
                         <p className="font-extrabold md:text-sm">Account & Lists</p>

@@ -26,7 +26,6 @@ export default function Home({products}) {
 }
 
 export async function getServerSideProps(context){
-  const session = await getSession(context)
   context.res.setHeader(
     'Cache-Control',
     'public, s-maxage=10, stale-while-revalidate=59'
