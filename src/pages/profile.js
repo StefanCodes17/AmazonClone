@@ -17,7 +17,7 @@ export default function Profile() {
             <ProfileSub text="Verify Email" subtext="Get a verification code sent to your main email" icon={<InboxIcon className='h-6 text-white'/>}/>
             <ProfileSub text="Profile" subtext="Edit login, name, mobile number" icon={<UserCircleIcon className='h-6 text-white'/>}/>
             <ProfileSub text="Your Orders" subtext="Track, return, or buy things again" icon={<ShoppingBagIcon className='h-6 text-white'/>}/>
-            <ProfileSub text="Sign Out" icon={<LogoutIcon className='h-6 text-white' onClick={signOut}/>}/>
+            <ProfileSub text="Sign Out" icon={<LogoutIcon className='h-6 text-white'/>} onClick={signOut}/>
           </div>
         </div>
       </div>
