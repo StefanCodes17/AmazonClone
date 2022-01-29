@@ -140,9 +140,10 @@ export default async (req, res)=>{
                 }
             })
         }
-        bcrypt.hash(password, 15, async function(err, hash) {
+        bcrypt.hash(password, 8, async function(err, hash) {
             try{
                 const {acknowledged} = await db.collection("users").insertOne({
+                    provider: "credentials",
                     email,
                     name: email.split("@")[0],
                     email_verified: false,
@@ -153,6 +154,7 @@ export default async (req, res)=>{
                 if(acknowledged) return res.status(200).json(data)
             }catch(e){
                 console.log(`Error adding user to db: ${e.message}`)
+                return res.status(401).json("Authentication error!")
             }
         });
     }

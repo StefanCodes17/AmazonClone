@@ -4,9 +4,6 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import {AddUser, SignInUser} from '../../../util/User'
 
 const options = {
-  session: { 
-    strategy: "jwt" 
-  },
   providers: [
     GoogleProvider({
         clientId: process.env.CLIENT_GOOGLE_ID,
@@ -21,7 +18,7 @@ const options = {
         },
         async authorize(credentials, req) {
           const {email, password} = credentials
-          return SignInUser(email, password)
+          return await SignInUser(email, password)
         }
       })
   ],
@@ -30,18 +27,32 @@ const options = {
   },
   secret: process.env.NX_SECRET,
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ user, account, profile, email, credentials }) {
       if (account.provider === "google" && profile.email_verified) {
         const {name, email, picture, email_verified} = profile
-        const user = AddUser({name, email, picture, email_verified})
+        const user = await AddUser({name, email, picture, email_verified, provider: "google"})
         if(user){
-          return true
-        }else{
-          return null
+          return user
         }
+        return null
       }
       return true
-    }
+    },
+    async jwt({token, user, account, profile, isNewUser}){
+      if(profile){ // handles google signin data
+        token.email_verified = profile.email_verified
+      }else if(user){ //handles credentials signin data
+        token.email_verified = user.email_verified
+      }
+      return Promise.resolve(token)
+    },
+    async session({ session, token, user }) {
+      session.user.email_verified = token.email_verified
+      return Promise.resolve(session)
+    },
+  },
+  session: {
+    strategy: "jwt" 
   }
 }
 
