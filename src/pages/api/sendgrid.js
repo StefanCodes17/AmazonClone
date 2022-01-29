@@ -14,8 +14,8 @@ export default async(req, res)=> {
           <head>
             <meta charset="utf-8">
           
-            <title>The HTML5 Herald</title>
-            <meta name="description" content="The HTML5 Herald">
+            <title>Amazon Clone</title>
+            <meta name="description" content="Amazon Clone">
             <meta name="author" content="SitePoint">
           <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
           
@@ -27,13 +27,12 @@ export default async(req, res)=> {
             <div class="img-container" style="display: flex;justify-content: center;align-items: center;border-radius: 5px;overflow: hidden; font-family: 'helvetica', 'ui-sans';">              
                   </div>
                   <div class="container" style="margin-left: 20px;margin-right: 20px;">
-                  <h3>You've got a new mail from amazon clone, their email is: ✉️${req.body.email} </h3>
+                  <h2>Welcome to Amazon!</h2>
                   <div style="font-size: 16px;">
-                  <p>Message:</p>
                   <p>${req.body.message}</p>
                   <br>
                   </div>
-                  <img src="https://manuarora.in/logo.png" class="logo-image" style="height: 50px;width: 50px;border-radius: 5px;overflow: hidden;">
+                  <img src="https://links.papareact.com/f90" class="logo-image" style="height: 50px;width: 50px;border-radius: 5px;overflow: hidden;">
                   <p class="footer" style="font-size: 16px;padding-bottom: 20px;border-bottom: 1px solid #D1D5DB;">Regards<br>Manu Arora<br>Software Developer<br>+91 9587738861</p>
                   <div class="footer-links" style="display: flex;justify-content: center;align-items: center;">
                     <a href="https://manuarora.in/" style="text-decoration: none;margin: 8px;color: #9CA3AF;">Website</a>
@@ -47,9 +46,7 @@ export default async(req, res)=> {
                   </div>
           </body>
           </html>`,
-        }).then(()=>{
-          console.log("Email sent")
-        });
+        })
       } catch (error) {
         console.log(error);
         return res.status(error.statusCode || 500).json({ error: error.message });
