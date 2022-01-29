@@ -1,7 +1,7 @@
 import { connectToDatabase } from '../../lib/mongodb'
 import { getSession } from "next-auth/react"
 import bcrypt from 'bcrypt'
-
+import axios from 'axios'
 /*
 {
     email:{
@@ -151,7 +151,19 @@ export default async (req, res)=>{
                     password: hash,
                     orders: []
                     })
-                if(acknowledged) return res.status(200).json(data)
+                if(acknowledged) {
+                    try{
+                        await axios.post(`${process.env.NEXTAUTH_URL}/api/sendgrid`,
+                        {
+                            email,
+                            subject: "Verification Email",
+                            message: "Verify your email!"
+                        })
+                    }catch(e){
+                        console.log(`Sendgrid axios api call ${e.message}`)
+                    }
+                    return res.status(200).json(data)
+                }
             }catch(e){
                 console.log(`Error adding user to db: ${e.message}`)
                 return res.status(401).json("Authentication error!")
