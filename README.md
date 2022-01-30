@@ -24,10 +24,10 @@ Password: ><123SecurePassword*><
 ```
 
 Features:
-Checkout with Stripe
-Email Verification with Send Grid
-React Redux Cart Functionality
-NextJS
+- Checkout with Stripe
+- Email Verification with Send Grid
+- React Redux Cart Functionality
+- NextJS
 
 ## Deploy on Vercel
 
