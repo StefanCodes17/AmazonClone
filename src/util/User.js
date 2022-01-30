@@ -49,9 +49,10 @@ export const SignInUser = async(email, password) =>{
     const { db } = await connectToDatabase();
     if(!db) throw Error("Failure to connect to database")
     const existingUser = await db.collection("users").findOne({email: email})
-    if(!existingUser || !existingUser.password) return null
+    if(!existingUser || existingUser.provider == "google" || !existingUser.email_verified) return null
 
     //Check password
     const res = await bcrypt.compare(password, existingUser.password);
     if(res) return existingUser
+    return null
 }
