@@ -19,24 +19,34 @@ export default async(req, res)=> {
                       <meta name="description" content="Amazon Clone">
                       <meta name="author" content="SitePoint">
                     <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
-                      <link rel="stylesheet" href="css/styles.css?v=1.0">
+                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;1,200;1,400&family=Space+Mono&family=Work+Sans&display=swap" rel="stylesheet">  
                     </head>
                     
                     <body>
-                      <div class="container" style="margin-left: 20px;margin-right: 20px;">
-                        <h2>Welcome to Amazon!</h2>
-                          <div style="font-size: 16px;">
-                            <p>${req.body.message}</p>
-                            <br>
-                          </div>
-                          <form action="${process.env.NEXTAUTH_URL}/api/verifyemail" method="POST">
-                            <button type="submit">
-                            Verify Your Email
-                            </button>
-                          </form>
-                        </div>
-                      </div>
-                    </body>
+ <div class="container" style="margin-left: 20px;margin-right: 20px; margin-top:10px; font-family: 'Montserrat', sans-serif;">
+   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png" alt="amazon_logo" width="120px">
+   <div>
+      <h2>Confirm Your Email!</h2>
+  <div style="font-size: 16px;">
+   <p style="color: rgba(91, 91, 91, 0.9); max-width:650px">${req.body.message}</p>
+    <br>
+  </div>
+     ${req.body.verify ? 
+      `
+      <form action="${process.env.NEXTAUTH_URL}/api/verifyemail" method="POST">
+    <input type="hidden" name="email" value=${req.body.email}></input>
+        <button type="submit" style="background:#232F3E; border:none; padding:12px 15px; color:white; font-size:1.1rem;cursor:pointer; ">
+          Verify Your Email
+        </button>
+      </form>
+    `
+     : ""}
+    </div>
+   </div>
+ </div>
+</body>
                     </html>
           `,
         })

@@ -191,6 +191,7 @@ export default function SignUp({ providers}) {
                 <div>
                   <p className="font-bold">Welcome!</p>
                   <p className="text-sm">{formStatus.account.success.message}</p>
+                  <p>Check your email for a verification!</p>
                 </div>
               </div>
             </div>}

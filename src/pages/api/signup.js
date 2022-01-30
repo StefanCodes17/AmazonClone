@@ -156,8 +156,9 @@ export default async (req, res)=>{
                         await axios.post(`${process.env.NEXTAUTH_URL}/api/sendgrid`,
                         {
                             email,
+                            verify: true,
                             subject: "Verification Email",
-                            message: "Verify your email!"
+                            message: "Protect your account by verfiying your email and making sure all order and confirmation numbers reach you to enable tracking and other features."
                         })
                     }catch(e){
                         console.log(`Sendgrid axios api call ${e.message}`)
