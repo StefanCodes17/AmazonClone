@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
-import {AddUser, SignInUser} from '../../../util/User'
+import {AddGoogleUser, SignInUser} from '../../../util/User'
 
 const options = {
   providers: [
@@ -30,7 +30,7 @@ const options = {
     async signIn({ user, account, profile, email, credentials }) {
       if (account.provider === "google" && profile.email_verified) {
         const {name, email, picture, email_verified} = profile
-        const user = await AddUser({name, email, picture, email_verified, provider: "google"})
+        const user = await AddGoogleUser({name, email, picture, email_verified, provider: "google"})
         if(user){
           return user
         }
