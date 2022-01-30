@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 import {AddUser, SignInUser} from '../../../util/User'
+import axios from 'axios'
 
 const options = {
   providers: [
