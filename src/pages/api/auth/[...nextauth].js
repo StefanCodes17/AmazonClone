@@ -30,6 +30,16 @@ const options = {
     async signIn({ user, account, profile, email, credentials }) {
       if (account.provider === "google" && profile.email_verified) {
         const {name, email, picture, email_verified} = profile
+        try{
+          await axios.post(`${process.env.NEXTAUTH_URL}/api/sendgrid`,
+          {
+              email,
+              subject: "Verification Email",
+              message: "Verify your email!"
+          })
+      }catch(e){
+          console.log(`Sendgrid axios api call ${e.message}`)
+      }
         const user = await AddUser({name, email, picture, email_verified, provider: "google"})
         if(user){
           return user
