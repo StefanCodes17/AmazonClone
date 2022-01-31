@@ -1,9 +1,14 @@
 import sendgrid from "@sendgrid/mail";
+import jwt from 'jsonwebtoken'
 
 sendgrid.setApiKey(process.env.SEND_GRID);
+const secret = process.env.NX_SECRET
 
 
 export default async(req, res)=> {
+  if(!req.body.email) return res.status(402).send("Unauthenticated access")
+  const token = jwt.sign({email: req.body.email}, secret)
+
     if(req.method === "POST"){
       try {
         await sendgrid.send({
@@ -35,12 +40,11 @@ export default async(req, res)=> {
   </div>
      ${req.body.verify ? 
       `
-      <form action="${process.env.NEXTAUTH_URL}/api/verifyemail" method="POST">
-    <input type="hidden" name="email" value=${req.body.email}></input>
+      <a href="${process.env.NEXTAUTH_URL}/verifyemail/${token}">
         <button type="submit" style="background:#232F3E; border:none; padding:12px 15px; color:white; font-size:1.1rem;cursor:pointer; ">
           Verify Your Email
         </button>
-      </form>
+      </a>
     `
      : ""}
     </div>
