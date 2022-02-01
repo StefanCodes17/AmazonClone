@@ -7,7 +7,7 @@ const VerifyEmail = () => {
   const router = useRouter()
   const { slug } = router.query
   useEffect(() =>{
-    const token = jwt.verify(slug[0], "sh")
+    const token = jwt.verify(slug[0], secret)
   }, [])
 
 return(
