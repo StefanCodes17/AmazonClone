@@ -9,6 +9,7 @@ const VerifyEmail = () => {
   const { slug } = router.query
   useEffect(() =>{
     const token = jwt.verify(slug[0], secret)
+    console.log(token)
   }, [])
 
 return(
