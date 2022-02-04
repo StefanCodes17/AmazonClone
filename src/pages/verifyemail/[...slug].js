@@ -5,19 +5,24 @@ import { UpdateUserVerification } from '../../util/User'
 
 
 const VerifyEmail = () => {
-  const router = useRouter()
-  const {slug} = router.query
-  useEffect(()=>{
-    if(slug){
-      const token = jwt.verify(slug[0], process.env.NX_SECRET)
-      UpdateUserVerification(token.email)
-      router.push("/")
-    }
-  }, [slug])
-
   return(
-      <div>Verifying email...</div>
+      <div></div>
   )
 }
+
+export async function getServerSideProps({query}){
+  const {slug} = query
+  const token = jwt.verify(slug[0], process.env.NX_SECRET)
+  if(token){
+    UpdateUserVerification(token.email)
+    return {
+      redirect:{
+      permanent: false,
+      destination: "/"
+      }
+    }
+  }
+}
+
 
 export default VerifyEmail

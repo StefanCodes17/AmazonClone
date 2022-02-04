@@ -47,7 +47,6 @@ const options = {
       return true
     },
     async jwt({token, user, account, profile, isNewUser}){
-      console.log("Making token")
       if(profile){ // handles google signin data
         token.email_verified = profile.email_verified
       }else if(user){ //handles credentials signin data

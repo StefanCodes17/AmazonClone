@@ -10,7 +10,6 @@ export const UpdateUserVerification = async(email) =>{
         user = await db.collection("users").updateOne(
               {"email": email },
               {$set: { email_verified: true }},
-              {upsert:true},
          )
     }catch(e){
         console.log(`Error updating email verification ${e.message}`)
