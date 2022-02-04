@@ -2,7 +2,7 @@ import { connectToDatabase } from '../lib/mongodb'
 import bcrypt from 'bcrypt'
 import axios from 'axios'
 
-export const UpdateUser = async(email) =>{
+export const UpdateUserVerification = async(email) =>{
     const { db } = await connectToDatabase();
     if(!db) throw Error("Failure to connect to database")
     let user;

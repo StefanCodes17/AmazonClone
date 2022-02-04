@@ -41,7 +41,7 @@ export default async(req, res)=> {
      ${req.body.verify ? 
       `
       <a href="${process.env.NEXTAUTH_URL}/verifyemail/${token}">
-        <button type="submit" style="background:#232F3E; border:none; padding:12px 15px; color:white; font-size:1.1rem;cursor:pointer; ">
+        <button type="submit" style="background:#232F3E; border:none; padding:12px 15px; color:white; font-size:1.1rem;cursor:pointer; " onMouseOver="this.style.cursor='pointer'">
           Verify Your Email
         </button>
       </a>
