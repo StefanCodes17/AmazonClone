@@ -34,7 +34,7 @@ export async function getServerSideProps(context){
   .then(res => res.json()).catch(e => console.log(e))
   return {
     props: {
-      products
+      products: products ? products : []
     }
   }
 }
