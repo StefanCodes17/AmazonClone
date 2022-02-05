@@ -3,7 +3,6 @@ import { connectToDatabase } from '../../lib/mongodb'
 
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 
 const fulfillOrder = async (session)=>{
     const { db } = await connectToDatabase();
@@ -33,7 +32,7 @@ export default async (req, res)=>{
 
         let event;
         try{
-            event = stripe.webhooks.constructEvent(payload, signature, endpointSecret)
+            event = stripe.webhooks.constructEvent(payload, signature, process.env.STRIPE_WEBHOOK_SECRET)
         }catch(err){
             console.log(`Webhook error: ${err.message}`)
             return res.status(400).send(`Webhook error: ${err.message}`)
