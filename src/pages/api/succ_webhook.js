@@ -1,6 +1,5 @@
 import {buffer} from 'micro'
 import { connectToDatabase } from '../../lib/mongodb'
-import { getSession } from "next-auth/react"
 
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
