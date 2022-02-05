@@ -144,6 +144,7 @@ export default async (req, res)=>{
             try{
                 const {acknowledged} = await db.collection("users").insertOne({
                     provider: "credentials",
+                    role: 1,
                     email,
                     name: email.split("@")[0],
                     email_verified: false,

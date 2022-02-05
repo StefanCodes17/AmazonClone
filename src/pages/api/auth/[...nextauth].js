@@ -18,14 +18,6 @@ const options = {
         },
         async authorize(credentials, req) {
           const {email, password} = credentials
-          if(email === "admin.admin@gmail.com" && password == "admin*//*password"){
-            return {
-              email,
-              name: "admin",
-              email_verified: true,
-              role: 0
-            }
-          }
           return await SignInUser(email, password)
         }
       })
@@ -49,6 +41,7 @@ const options = {
     async jwt({token, user, account, profile, isNewUser}){
       if(profile){ // handles google signin data
         token.email_verified = profile.email_verified
+        token.role = 1
       }else if(user){ //handles credentials signin data
         token.email_verified = user.email_verified
         token.role = user?.role

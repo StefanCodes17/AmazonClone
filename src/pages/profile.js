@@ -3,7 +3,7 @@ import { getSession, useSession } from 'next-auth/react'
 import {signOut} from "next-auth/react"
 import ProfileSub from "../components/profileSub"
 import { LogoutIcon, InboxIcon, UserCircleIcon, ShoppingBagIcon, } from '@heroicons/react/outline'
-import { CheckCircleIcon } from '@heroicons/react/solid'
+import { CheckCircleIcon, ChartSquareBarIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 
 export default function Profile() {
@@ -22,6 +22,7 @@ export default function Profile() {
             {!session?.user?.email_verified && <ProfileSub text="Verify Email" subtext="Get a verification code sent to your main email" icon={<InboxIcon className='h-6 text-white'/>}/>}
             <ProfileSub text="Profile" subtext="Edit login, name, mobile number" icon={<UserCircleIcon className='h-6 text-white'/>}/>
             <ProfileSub text="Your Orders" subtext="Track, return, or buy things again" icon={<ShoppingBagIcon className='h-6 text-white'/>} onClick={()=>router.push("/orders")}/>
+            {session?.user?.name == "admin" && <ProfileSub text="Dashboard" subtext="Get up-to-date statistics on orders, users and inventory" icon={<ChartSquareBarIcon className='h-6 text-white'/>} onClick={()=> router.push("/dashboard")}/>}
             <ProfileSub text="Sign Out" icon={<LogoutIcon className='h-6 text-white'/>} onClick={signOut}/>
           </div>
         </div>

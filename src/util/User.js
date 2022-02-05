@@ -38,6 +38,7 @@ export const AddGoogleUser = async ({...user})=>{
                 }
            return db.collection("users").insertOne({
               ...user,
+              role: 1,
               orders: []
             })
         }

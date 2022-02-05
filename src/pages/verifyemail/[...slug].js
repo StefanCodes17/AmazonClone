@@ -18,7 +18,7 @@ export async function getServerSideProps({query}){
     return {
       redirect:{
       permanent: false,
-      destination: "/"
+      destination: "/auth/signin"
       }
     }
   }
