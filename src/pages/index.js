@@ -31,7 +31,7 @@ export async function getServerSideProps(context){
     'public, s-maxage=10, stale-while-revalidate=59'
   )
   const products = await fetch("https://fakestoreapi.com/products")
-  .then(res => res.json())
+  .then(res => res.json()).catch(e => console.log(e))
   return {
     props: {
       products
