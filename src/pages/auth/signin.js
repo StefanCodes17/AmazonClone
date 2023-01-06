@@ -28,7 +28,7 @@ export default function SignIn({ providers}) {
   const handleSubmit = (e) =>{
     e.preventDefault()
     setLoading(true)
-    signIn(providers.credentials.id, { email, password, callbackUrl: `${process.env.NEXTAUTH_URL}`})
+    signIn(providers.credentials.id, { email, password, callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}`})
   }
 
   return (
@@ -85,7 +85,7 @@ export default function SignIn({ providers}) {
               </div>
               <button type="submit" className="button mt-4">Sign In</button>
             </form>
-            <div className="mt-5 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXTAUTH_URL}`})}>
+            <div className="mt-5 hover:cursor-pointer" onClick={()=>signIn(providers.google.id,{callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}`})}>
               <GoogleIcon/>
             </div>
             {query.error && (
