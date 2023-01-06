@@ -33,6 +33,7 @@ const subLinks = [
 const Header = () => {
 
     const { data: session, status } = useSession()
+    console.log(session, status)
     const router = useRouter()
     const items = useSelector(selectItems)
     return (
@@ -59,7 +60,7 @@ const Header = () => {
                 <div className='text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap'>
                     <div className="main_link" onClick={() => !session ? signIn() : router.push("/profile")}>
                         <p>
-                            {session ? `Hello, ${session.user.name}` : `Sign In`}</p>
+                            {session ? `Hello, ${session.user.name || session.user.email}` : `Sign In`}</p>
                         <p className="font-extrabold md:text-sm">Account & Lists</p>
                     </div>
                     <Link href="/orders">

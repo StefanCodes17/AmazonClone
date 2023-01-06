@@ -54,8 +54,8 @@ export default async(req, res)=> {
                     </html>
           `,
         })
+        console.log("Successfully sent sendgrid email")
       } catch (error) {
-        console.log(error);
         return res.status(error.statusCode || 500).json({ error: error.message });
       }
     

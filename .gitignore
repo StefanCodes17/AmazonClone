@@ -16,8 +16,10 @@
 /build
 
 # misc
+./next-env.d.ts
 .DS_Store
 *.pem
+*.txt
 
 # debug
 npm-debug.log*

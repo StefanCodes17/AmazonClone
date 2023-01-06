@@ -1,57 +1,58 @@
-import { connectToDatabase } from '../lib/mongodb'
+import {connectToDatabase} from '../lib/mongodb'
+import UserModel from '../pages/api/database/user'
+
 import bcrypt from 'bcrypt'
 import axios from 'axios'
 
-export const UpdateUserVerification = async(email) =>{
-    const { db } = await connectToDatabase();
-    if(!db) throw Error("Failure to connect to database")
+export const UpdateUserVerification = async (email) => {
+    const {db} = await connectToDatabase();
+    if (!db) throw Error("Failure to connect to database")
     let user;
-    try{
+    try {
         user = await db.collection("users").updateOne(
-              {"email": email },
-              {$set: { email_verified: true }},
-         )
-    }catch(e){
+            {"email": email},
+            {$set: {email_verified: true}},
+        )
+    } catch (e) {
         console.log(`Error updating email verification ${e.message}`)
     }
     return user
 }
 
-export const AddGoogleUser = async ({...user})=>{
-    const { db } = await connectToDatabase();
-    if(!db) throw Error("Failure to connect to database")
-    const existingUser = await db.collection("users").findOne({email: user.email})
-        if(!existingUser){
-                try{
-                    await axios.post(`${process.env.NEXTAUTH_URL}/api/sendgrid`,
-                    {
-                        verify: !user.email_verified,
-                        email: user.email,
-                        subject: "Welcome to Amazon!",
-                        message: `
-                        Protect your account by verfiying your email and making sure all order and confirmation numbers reach you to enable tracking and other features.
-                        ${user.email_verified && `Since you're already verified, head over to <a href=${process.env.NEXTAUTH_URL}>Amazon</a> and keep shopping!`}
-                        `
-                    })
-                }catch(e){
-                    console.log(`Sendgrid axios api call ${e.message}`)
-                }
-           return db.collection("users").insertOne({
-              ...user,
-              role: 1,
-              orders: []
-            })
+export const AddUser = async (email, password, provider) =>{
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(password, saltRounds) 
+    if(hashedPassword){
+        const userInstance = new UserModel({email, password: hashedPassword, provider, username: email})
+        const user = await userInstance.save()
+        if(user){
+            return {user}
         }
-    return existingUser
+    }else{
+        throw new Error("Error creating hashed password")
+    }
+    return {user: null}
 }
 
-export const SignInUser = async(email, password) =>{
-    const { db } = await connectToDatabase();
-    if(!db) throw Error("Failure to connect to database")
-    const existingUser = await db.collection("users").findOne({email: email})
-    if(!existingUser || existingUser.provider == "google" || !existingUser.email_verified) return null
+export const AddGoogleUser = async ({...user}) => {
+    console.log("AddGoogleUser", user)
+    const existingUser = await UserModel.findOne({'email': user.email}).exec()
+    console.log("AddGoogleUserExisting", existingUser)
+    if(existingUser) return existingUser
+    try{
+        const {user: mongoUser} = await AddUser(email, password, "credentials")
+        if(mongoUser){
+            return mongoUser
+        }
+    }catch (err){
+        return null
+    }
+}
 
-    //Check password
+export const SignInUser = async (email, password) => {
+    const existingUser = await UserModel.findOne({'email': email}).exec()
+    if(!existingUser || !existingUser.email_verified) return null
+
     const res = await bcrypt.compare(password, existingUser.password);
     if(res) return existingUser
     return null

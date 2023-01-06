@@ -1,7 +1,6 @@
 import {buffer} from 'micro'
 import { connectToDatabase } from '../../lib/mongodb'
 
-
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 const fulfillOrder = async (session)=>{
